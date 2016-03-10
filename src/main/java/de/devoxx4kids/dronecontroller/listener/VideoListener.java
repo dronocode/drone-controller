@@ -1,8 +1,13 @@
 package de.devoxx4kids.dronecontroller.listener;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import java.lang.invoke.MethodHandles;
+
+import java.util.Arrays;
+import java.util.logging.Logger;
 
 
 /**
@@ -10,16 +15,16 @@ import java.io.IOException;
  */
 public class VideoListener implements EventListener {
 
-    private final FileOutputStream fileOutputStream;
-    private int pictureCounter = 0;
-    private byte[] temp = new byte[] {};
+    private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().toString());
 
-    public VideoListener() throws FileNotFoundException {
+    private static final String FRAME_JPG = "frame.jpg";
 
-        fileOutputStream = new FileOutputStream("video.mp4");
+    private VideoListener() {
+
+        // private, please use fabric method
     }
 
-    public static VideoListener videoListener() throws FileNotFoundException {
+    public static VideoListener videoListener() {
 
         return new VideoListener();
     }
@@ -29,40 +34,23 @@ public class VideoListener implements EventListener {
     public void eventFired(byte[] data) {
 
         if (data[1] == 125) {
-            concatenateByteArrays(temp, getJpegDate(data));
+            System.out.println("PICTURE");
+            System.out.println(Arrays.toString(data));
 
-            if (pictureCounter == 15) {
-                try {
-                    fileOutputStream.write(temp);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try(FileOutputStream fileOutputStream = new FileOutputStream(new File(FRAME_JPG))) {
+                fileOutputStream.write(getJpeg(data));
+            } catch (IOException e) {
+                LOGGER.warning("Could not generate jpg");
             }
-
-            pictureCounter++;
         }
     }
 
 
-    private byte[] getJpegDate(byte[] data) {
+    private byte[] getJpeg(byte[] data) {
 
         byte[] jpegData = new byte[data.length];
         System.arraycopy(data, 12, jpegData, 0, data.length - 12);
 
         return jpegData;
-    }
-
-
-    private byte[] concatenateByteArrays(byte[] a, byte[] b) {
-
-        byte[] result = new byte[a.length + b.length];
-        System.arraycopy(a, 0, result, 0, a.length);
-        System.arraycopy(b, 0, result, a.length, b.length);
-
-        System.out.println("a " + a.toString());
-        System.out.println("b " + b.toString());
-        System.out.println("result " + result.toString());
-
-        return result;
     }
 }
