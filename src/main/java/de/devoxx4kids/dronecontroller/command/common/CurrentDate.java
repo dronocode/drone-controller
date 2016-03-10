@@ -67,11 +67,4 @@ public final class CurrentDate implements CommonCommand {
 
         return "CurrentDate{" + clock.instant() + '}';
     }
-
-
-    @Override
-    public int waitingTime() {
-
-        return 150;
-    }
 }

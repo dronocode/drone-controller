@@ -40,11 +40,4 @@ public final class Pong implements CommonCommand {
 
         return "Pong";
     }
-
-
-    @Override
-    public int waitingTime() {
-
-        return 50;
-    }
 }

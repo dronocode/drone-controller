@@ -68,11 +68,4 @@ public final class CurrentTime implements CommonCommand {
 
         return "CurrentTime{" + clock.instant() + '}';
     }
-
-
-    @Override
-    public int waitingTime() {
-
-        return 150;
-    }
 }
