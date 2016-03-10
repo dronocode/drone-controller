@@ -166,7 +166,12 @@ public class WirelessLanDroneConnection implements DroneConnection {
 
                         byte[] packet = command.getBytes(changeAndGetCounter(command));
                         sumoSocket.send(new DatagramPacket(packet, packet.length, getByName(deviceIp), devicePort));
-                        LOGGER.info(format("Sending command: %s", command));
+
+                        if (command instanceof CommonCommand) {
+                            LOGGER.config(format("Sending command: %s", command));
+                        } else {
+                            LOGGER.info(format("Sending command: %s", command));
+                        }
 
                         MILLISECONDS.sleep(command.waitingTime());
                     } catch (InterruptedException e) {
