@@ -23,10 +23,8 @@ public interface DroneConnection {
      * Sends the given {@link Command} to the drone.
      *
      * @param  command  to send to drone
-     *
-     * @throws  IOException
      */
-    void sendCommand(Command command) throws IOException;
+    void sendCommand(Command command);
 
 
     /**
