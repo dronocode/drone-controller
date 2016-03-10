@@ -5,4 +5,4 @@
 
 # Drone Controller
 
-This library encapsulates the connection to the drone and the commands that can be send to the drone.
+This library encapsulates the connection and the commands that can be send to the drone.
