@@ -22,7 +22,7 @@ public final class Pong implements CommonCommand {
 
 
     @Override
-    public byte[] getBytes(int counter) {
+    public byte[] getBytes(int sequence) {
 
         return new byte[] { 1, (byte) 0xfe, (byte) this.counter, 8, 0, 0, 0, (byte) this.counter };
     }

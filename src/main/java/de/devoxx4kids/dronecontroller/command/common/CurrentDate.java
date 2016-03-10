@@ -36,11 +36,11 @@ public final class CurrentDate implements CommonCommand {
 
 
     @Override
-    public byte[] getBytes(int counter) {
+    public byte[] getBytes(int sequence) {
 
         byte[] header = {
             (byte) FrameType.ARNETWORKAL_FRAME_TYPE_DATA_WITH_ACK.ordinal(),
-            ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.getId(), (byte) counter, 15, 0, 0, 0,
+            ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.getId(), (byte) sequence, 15, 0, 0, 0,
             commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0
         };
 

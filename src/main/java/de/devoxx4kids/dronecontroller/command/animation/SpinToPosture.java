@@ -29,11 +29,11 @@ public final class SpinToPosture implements Command {
 
 
     @Override
-    public byte[] getBytes(int counter) {
+    public byte[] getBytes(int sequence) {
 
         return new byte[] {
                 (byte) FrameType.ARNETWORKAL_FRAME_TYPE_DATA_WITH_ACK.ordinal(),
-                ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.getId(), (byte) counter, 15, 0, 0, 0,
+                ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.getId(), (byte) sequence, 15, 0, 0, 0,
                 commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0, 7, 0, 0, 0
             };
     }

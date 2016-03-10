@@ -85,13 +85,13 @@ public final class Pcmd implements Command {
 
 
     @Override
-    public byte[] getBytes(int counter) {
+    public byte[] getBytes(int sequence) {
 
         byte touchscreen = 1;
 
         return new byte[] {
                 (byte) FrameType.ARNETWORKAL_FRAME_TYPE_DATA.ordinal(),
-                ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_NONACK_ID.getId(), (byte) counter, 14, 0, 0, 0,
+                ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_NONACK_ID.getId(), (byte) sequence, 14, 0, 0, 0,
                 commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0, touchscreen, speed,
                 turn
             };
