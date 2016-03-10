@@ -41,4 +41,20 @@ public class MetronomeTest {
         Acknowledge acknowledge = sut.getAcknowledge();
         assertThat(acknowledge, is(Acknowledge.AckBefore));
     }
+
+
+    @Test
+    public void testToString() {
+
+        assertThat(sut.toString(), is("Metronome"));
+    }
+
+
+    @Test
+    public void waitingTime() {
+
+        int waitingTime = sut.waitingTime();
+
+        assertThat(waitingTime, is(3000));
+    }
 }

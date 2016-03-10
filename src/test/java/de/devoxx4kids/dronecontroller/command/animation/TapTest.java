@@ -48,4 +48,13 @@ public class TapTest {
 
         assertThat(sut.toString(), is("Tap"));
     }
+
+
+    @Test
+    public void waitingTime() {
+
+        int waitingTime = sut.waitingTime();
+
+        assertThat(waitingTime, is(500));
+    }
 }

@@ -41,4 +41,20 @@ public class SpiralTest {
         Acknowledge acknowledge = sut.getAcknowledge();
         assertThat(acknowledge, is(Acknowledge.AckBefore));
     }
+
+
+    @Test
+    public void testToString() {
+
+        assertThat(sut.toString(), is("Spiral"));
+    }
+
+
+    @Test
+    public void waitingTime() {
+
+        int waitingTime = sut.waitingTime();
+
+        assertThat(waitingTime, is(7000));
+    }
 }

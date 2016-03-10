@@ -8,8 +8,6 @@ import de.devoxx4kids.dronecontroller.command.FrameType;
 
 
 /**
- * TODO: Do not use this will stop the drone
- *
  * @author  Alexander Bischof
  * @author  Tobias Schneider
  */
