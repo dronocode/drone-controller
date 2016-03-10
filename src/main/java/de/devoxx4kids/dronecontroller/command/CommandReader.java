@@ -7,7 +7,7 @@ public class CommandReader {
 
     private final byte[] data;
 
-    protected CommandReader(byte[] data) {
+    private CommandReader(byte[] data) {
 
         this.data = data.clone();
     }

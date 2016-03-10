@@ -10,7 +10,7 @@ public final class PCMDListener implements EventListener {
 
     private final Consumer<String> consumer;
 
-    protected PCMDListener(Consumer<String> consumer) {
+    private PCMDListener(Consumer<String> consumer) {
 
         this.consumer = consumer;
     }

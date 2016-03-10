@@ -15,7 +15,7 @@ public final class Ondulation implements Command {
 
     private final CommandKey commandKey = CommandKey.commandKey(3, 2, 4);
 
-    protected Ondulation() {
+    private Ondulation() {
 
         // use fabric method
     }

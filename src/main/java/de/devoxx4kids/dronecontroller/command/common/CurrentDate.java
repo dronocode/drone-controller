@@ -24,7 +24,7 @@ public final class CurrentDate implements CommonCommand {
     private final CommandKey commandKey = CommandKey.commandKey(0, 4, 0);
     private final Clock clock;
 
-    protected CurrentDate(Clock clock) {
+    private CurrentDate(Clock clock) {
 
         this.clock = clock;
     }

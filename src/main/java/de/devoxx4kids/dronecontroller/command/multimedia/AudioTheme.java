@@ -28,7 +28,7 @@ public final class AudioTheme implements Command {
     private final CommandKey commandKey = CommandKey.commandKey(3, 12, 1);
     private final Theme theme;
 
-    protected AudioTheme(AudioTheme.Theme theme) {
+    private AudioTheme(AudioTheme.Theme theme) {
 
         this.theme = theme;
     }

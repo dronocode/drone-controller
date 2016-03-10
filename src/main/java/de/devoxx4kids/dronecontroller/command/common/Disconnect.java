@@ -13,7 +13,7 @@ public final class Disconnect implements CommonCommand {
 
     private final CommandKey commandKey = CommandKey.commandKey(0, 0, 0);
 
-    protected Disconnect() {
+    private Disconnect() {
 
         // use fabric method
     }

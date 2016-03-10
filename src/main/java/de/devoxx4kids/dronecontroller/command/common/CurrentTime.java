@@ -24,7 +24,7 @@ public final class CurrentTime implements CommonCommand {
     private final CommandKey commandKey = CommandKey.commandKey(0, 4, 1);
     private final Clock clock;
 
-    protected CurrentTime(Clock clock) {
+    private CurrentTime(Clock clock) {
 
         this.clock = clock;
     }

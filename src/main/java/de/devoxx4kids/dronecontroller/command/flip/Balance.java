@@ -14,7 +14,7 @@ public final class Balance implements Command {
 
     private final CommandKey commandKey = CommandKey.commandKey(3, 0, 1);
 
-    protected Balance() {
+    private Balance() {
 
         // use fabric method
     }

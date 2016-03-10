@@ -6,7 +6,7 @@ public class CommandKey {
     private final byte clazzId;
     private final byte commandId;
 
-    protected CommandKey(int projectId, int clazzId, int commandId) {
+    private CommandKey(int projectId, int clazzId, int commandId) {
 
         this.projectId = (byte) projectId;
         this.clazzId = (byte) clazzId;

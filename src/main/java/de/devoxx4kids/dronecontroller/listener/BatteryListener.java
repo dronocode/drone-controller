@@ -10,7 +10,7 @@ public final class BatteryListener implements EventListener {
 
     private final Consumer<Byte> consumer;
 
-    protected BatteryListener(Consumer<Byte> consumer) {
+    private BatteryListener(Consumer<Byte> consumer) {
 
         this.consumer = consumer;
     }

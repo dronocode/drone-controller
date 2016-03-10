@@ -14,7 +14,7 @@ public final class Tap implements Command {
 
     private final CommandKey commandKey = CommandKey.commandKey(3, 2, 4);
 
-    protected Tap() {
+    private Tap() {
 
         // use fabric method
     }

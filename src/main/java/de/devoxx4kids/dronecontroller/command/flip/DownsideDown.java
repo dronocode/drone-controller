@@ -14,7 +14,7 @@ public final class DownsideDown implements Command {
 
     private final CommandKey commandKey = CommandKey.commandKey(3, 0, 1);
 
-    protected DownsideDown() {
+    private DownsideDown() {
 
         // use fabric method
     }

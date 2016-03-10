@@ -14,7 +14,7 @@ public final class StopAnimation implements Command {
 
     private final CommandKey commandKey = CommandKey.commandKey(3, 2, 4);
 
-    protected StopAnimation() {
+    private StopAnimation() {
 
         // use fabric method
     }

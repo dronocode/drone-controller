@@ -22,7 +22,7 @@ public final class Jump implements Command {
     private final CommandKey commandKey = CommandKey.commandKey(3, 2, 3);
     private final Type type;
 
-    protected Jump(Type type) {
+    private Jump(Type type) {
 
         this.type = type;
     }

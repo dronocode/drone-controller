@@ -15,7 +15,7 @@ public final class Spiral implements Command {
 
     private final CommandKey commandKey = CommandKey.commandKey(3, 2, 4);
 
-    protected Spiral() {
+    private Spiral() {
 
         // use fabric method
     }

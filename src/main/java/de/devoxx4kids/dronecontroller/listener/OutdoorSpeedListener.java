@@ -10,7 +10,7 @@ public final class OutdoorSpeedListener implements EventListener {
 
     private final Consumer<String> consumer;
 
-    protected OutdoorSpeedListener(Consumer<String> consumer) {
+    private OutdoorSpeedListener(Consumer<String> consumer) {
 
         this.consumer = consumer;
     }

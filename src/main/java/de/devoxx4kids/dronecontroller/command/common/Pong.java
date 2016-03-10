@@ -10,7 +10,7 @@ public final class Pong implements CommonCommand {
 
     private final int counter;
 
-    public Pong(int counter) {
+    private Pong(int counter) {
 
         this.counter = counter;
     }

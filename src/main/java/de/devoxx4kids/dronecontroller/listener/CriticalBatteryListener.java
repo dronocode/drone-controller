@@ -10,7 +10,7 @@ public final class CriticalBatteryListener implements EventListener {
 
     private final Consumer<BatteryState> consumer;
 
-    protected CriticalBatteryListener(Consumer<BatteryState> consumer) {
+    private CriticalBatteryListener(Consumer<BatteryState> consumer) {
 
         this.consumer = consumer;
     }

@@ -24,7 +24,7 @@ public final class Pcmd implements Command {
     private final byte turn;
     private final Integer waitingTime;
 
-    protected Pcmd(int speed, int degrees, Integer waitingTime) {
+    private Pcmd(int speed, int degrees, Integer waitingTime) {
 
         if (waitingTime != null && waitingTime < 0) {
             throw new IllegalArgumentException(format("Waiting time must be greater or equal zero but is %s",
