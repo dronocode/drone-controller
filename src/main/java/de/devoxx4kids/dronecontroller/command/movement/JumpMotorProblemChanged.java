@@ -41,4 +41,11 @@ public final class JumpMotorProblemChanged implements Command {
 
         return Acknowledge.None;
     }
+
+
+    @Override
+    public String toString() {
+
+        return "JumpMotorProblemChanged";
+    }
 }
