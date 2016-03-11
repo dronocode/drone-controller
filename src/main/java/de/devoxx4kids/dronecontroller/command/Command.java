@@ -33,7 +33,7 @@ public interface Command {
      * </li>
      * </ol>
      *
-     * @param  sequence
+     * @param  sequence  the increasing sequence number of the packets
      *
      * @return  byte package of command
      */
@@ -41,9 +41,9 @@ public interface Command {
 
 
     /**
-     * TODO Describe why this is needed.
+     * Describes if the sequence number have to increased before/after sending the command or maybe never.
      *
-     * @return
+     * @return  the {@link Acknowledge} type
      */
     Acknowledge getAcknowledge();
 
