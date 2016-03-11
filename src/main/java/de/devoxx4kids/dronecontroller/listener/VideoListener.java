@@ -1,5 +1,8 @@
 package de.devoxx4kids.dronecontroller.listener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,7 +10,6 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 
 import java.util.Arrays;
-import java.util.logging.Logger;
 
 
 /**
@@ -15,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class VideoListener implements EventListener {
 
-    private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().toString());
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final String FRAME_JPG = "frame.jpg";
 
@@ -40,7 +42,7 @@ public class VideoListener implements EventListener {
             try(FileOutputStream fileOutputStream = new FileOutputStream(new File(FRAME_JPG))) {
                 fileOutputStream.write(getJpeg(data));
             } catch (IOException e) {
-                LOGGER.warning("Could not generate jpg");
+                LOGGER.error("Could not generate jpg");
             }
         }
     }

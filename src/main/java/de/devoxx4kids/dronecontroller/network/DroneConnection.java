@@ -3,8 +3,6 @@ package de.devoxx4kids.dronecontroller.network;
 import de.devoxx4kids.dronecontroller.command.Command;
 import de.devoxx4kids.dronecontroller.listener.EventListener;
 
-import java.io.IOException;
-
 
 /**
  * @author  Tobias Schneider
@@ -14,9 +12,9 @@ public interface DroneConnection {
     /**
      * Connect with the drone with the constructor injected credentials.
      *
-     * @throws  IOException
+     * @throws  ConnectionException  when the connection to the drone could not be established
      */
-    void connect() throws IOException;
+    void connect() throws ConnectionException;
 
 
     /**

@@ -9,7 +9,10 @@ import de.devoxx4kids.dronecontroller.command.common.Pong;
 import de.devoxx4kids.dronecontroller.listener.EventListener;
 import de.devoxx4kids.dronecontroller.network.handshake.HandshakeRequest;
 import de.devoxx4kids.dronecontroller.network.handshake.HandshakeResponse;
-import de.devoxx4kids.dronecontroller.network.handshake.TcpHandshake;
+import de.devoxx4kids.dronecontroller.network.handshake.TcpHandshakeService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -24,9 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.logging.Logger;
-
-import static java.lang.String.format;
 
 import static java.net.InetAddress.getByName;
 
@@ -40,7 +40,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  */
 public class WirelessLanDroneConnection implements DroneConnection {
 
-    private static final Logger LOGGER = Logger.getLogger(MethodHandles.lookup().lookupClass().toString());
+    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final String CONTROLLER_TYPE = "_arsdk-0902._udp";
 
@@ -59,7 +59,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
 
     public WirelessLanDroneConnection(String deviceIp, int tcpPort, String wirelessLanName) {
 
-        LOGGER.info(format("Creating " + this.getClass().getSimpleName() + " for %s:%s...", deviceIp, tcpPort));
+        LOGGER.info("Creating {} for {}:{}...", this.getClass().getSimpleName(), deviceIp, tcpPort);
 
         this.deviceIp = deviceIp;
         this.tcpPort = tcpPort;
@@ -68,14 +68,21 @@ public class WirelessLanDroneConnection implements DroneConnection {
     }
 
     @Override
-    public void connect() throws IOException {
+    public void connect() throws ConnectionException {
 
-        LOGGER.fine("Connecting to drone...");
+        LOGGER.debug("Connecting to drone...");
 
         HandshakeRequest handshakeRequest = new HandshakeRequest(wirelessLanName, CONTROLLER_TYPE);
-        HandshakeResponse handshakeResponse = new TcpHandshake(deviceIp, tcpPort).shake(handshakeRequest);
+        HandshakeResponse handshakeResponse;
+
+        try {
+            handshakeResponse = new TcpHandshakeService(deviceIp, tcpPort).shake(handshakeRequest);
+        } catch (IOException e) {
+            throw new ConnectionException("Error while trying to connect to the drone - check your connection", e);
+        }
+
         devicePort = handshakeResponse.getC2d_port();
-        LOGGER.info(format("Connected to drone - Handshake completed with %s", handshakeResponse));
+        LOGGER.info("Connected to drone - Handshake completed with {}", handshakeResponse);
 
         sendCommand(CurrentDate.currentDate(clock));
         sendCommand(CurrentTime.currentTime(clock));
@@ -96,7 +103,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
                 commandQueue.put(command);
             }
         } catch (InterruptedException e) {
-            LOGGER.info("Could not add " + command + " to a queue.");
+            LOGGER.info("Could not add {} to a queue.", command);
         }
     }
 
@@ -118,7 +125,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
 
         new Thread(() -> {
             try(DatagramSocket sumoSocket = new DatagramSocket(devicePort)) {
-                LOGGER.info(format("Listing for response on port %s", devicePort));
+                LOGGER.info("Listing for response on port {}", devicePort);
 
                 int pingCounter = 0;
 
@@ -132,7 +139,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
 
                     // Answer with a Pong
                     if (data[1] == 126) {
-                        LOGGER.config("Ping");
+                        LOGGER.debug("Ping");
                         sendCommand(Pong.pong(data[3]));
 
                         if (pingCounter > 10 && pingCounter % 10 == 1) {
@@ -148,7 +155,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
                     eventListeners.stream().forEach(eventListener -> eventListener.eventFired(data));
                 }
             } catch (IOException e) {
-                LOGGER.warning("Error occurred while receiving packets from the drone.");
+                LOGGER.error("Error occurred while receiving packets from the drone.");
             }
         }).start();
     }
@@ -156,7 +163,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
 
     private void runConsumer(BlockingQueue<Command> queue) {
 
-        LOGGER.info("Creating a specific command queue consumer...");
+        LOGGER.debug("Creating a command queue consumer");
 
         new Thread(() -> {
             try(DatagramSocket sumoSocket = new DatagramSocket()) {
@@ -168,9 +175,9 @@ public class WirelessLanDroneConnection implements DroneConnection {
                         sumoSocket.send(new DatagramPacket(packet, packet.length, getByName(deviceIp), devicePort));
 
                         if (command instanceof CommonCommand) {
-                            LOGGER.config(format("Sending command: %s", command));
+                            LOGGER.debug("Sending command: {}", command);
                         } else {
-                            LOGGER.info(format("Sending command: %s", command));
+                            LOGGER.info("Sending command: {}", command);
                         }
 
                         MILLISECONDS.sleep(command.waitingTime());
@@ -179,7 +186,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
                     }
                 }
             } catch (IOException e) {
-                LOGGER.warning("Error occurred while sending packets to the drone.");
+                LOGGER.error("Error occurred while sending packets to the drone.");
             }
         }).start();
     }
