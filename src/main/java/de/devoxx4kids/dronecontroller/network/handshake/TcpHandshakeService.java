@@ -27,7 +27,7 @@ public class TcpHandshakeService implements HandShakeService {
 
     public TcpHandshakeService(String deviceIp, int tcpPort) throws IOException {
 
-        tcpSocket = new Socket(deviceIp, tcpPort);
+        tcpSocket = createSocket(deviceIp, tcpPort);
         tcpOut = new PrintWriter(tcpSocket.getOutputStream(), true);
         tcpIn = new BufferedReader(new InputStreamReader(tcpSocket.getInputStream()));
     }
@@ -61,6 +61,12 @@ public class TcpHandshakeService implements HandShakeService {
         }
 
         return deviceAnswer;
+    }
+
+
+    protected Socket createSocket(String deviceIp, int tcpPort) throws IOException {
+
+        return new Socket(deviceIp, tcpPort);
     }
 
 
