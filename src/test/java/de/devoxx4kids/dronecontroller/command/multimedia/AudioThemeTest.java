@@ -1,5 +1,8 @@
 package de.devoxx4kids.dronecontroller.command.multimedia;
 
+import de.devoxx4kids.dronecontroller.command.Acknowledge;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -14,6 +17,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class AudioThemeTest {
 
+    private AudioTheme sut;
+
+    @Before
+    public void setUp() throws Exception {
+
+        sut = AudioTheme.audioTheme(AudioTheme.Theme.Default);
+    }
+
+
     @Test
     public void themes() {
 
@@ -27,8 +39,22 @@ public class AudioThemeTest {
     @Test
     public void getBytes() {
 
-        byte[] bytesPackage = AudioTheme.audioTheme(AudioTheme.Theme.Default).getBytes(1);
+        byte[] bytesPackage = sut.getBytes(1);
 
         assertThat(bytesPackage, is(new byte[] { 4, 11, 1, 15, 0, 0, 0, 3, 12, 1, 0, 0, 0, 0, 0 }));
+    }
+
+
+    @Test
+    public void getAcknowledge() {
+
+        assertThat(sut.getAcknowledge(), is(Acknowledge.AckBefore));
+    }
+
+
+    @Test
+    public void testToString() {
+
+        assertThat(sut.toString(), is("AudioTheme{theme=Default}"));
     }
 }

@@ -1,5 +1,8 @@
 package de.devoxx4kids.dronecontroller.command.multimedia;
 
+import de.devoxx4kids.dronecontroller.command.Acknowledge;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -14,12 +17,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class VolumeTest {
 
-    @Test
-    public void volume() {
+    private Volume sut;
 
-        byte[] bytesPackage = Volume.volume(50).getBytes(1);
+    @Before
+    public void setUp() throws Exception {
 
-        assertThat(bytesPackage, is(new byte[] { 4, 11, 1, 12, 0, 0, 0, 3, 12, 0, 0, 50, 0 }));
+        sut = Volume.volume(50);
     }
 
 
@@ -34,5 +37,28 @@ public class VolumeTest {
     public void volumeToHigh() {
 
         Volume.volume(101);
+    }
+
+
+    @Test
+    public void volume() {
+
+        byte[] bytesPackage = sut.getBytes(1);
+
+        assertThat(bytesPackage, is(new byte[] { 4, 11, 1, 12, 0, 0, 0, 3, 12, 0, 0, 50, 0 }));
+    }
+
+
+    @Test
+    public void getAcknowledge() {
+
+        assertThat(sut.getAcknowledge(), is(Acknowledge.AckBefore));
+    }
+
+
+    @Test
+    public void testToString() {
+
+        assertThat(sut.toString(), is("Volume{volume=50}"));
     }
 }
