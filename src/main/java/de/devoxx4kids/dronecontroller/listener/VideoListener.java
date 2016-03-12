@@ -9,8 +9,6 @@ import java.io.IOException;
 
 import java.lang.invoke.MethodHandles;
 
-import java.util.Arrays;
-
 
 /**
  * @author  Tobias Schneider
@@ -33,18 +31,20 @@ public class VideoListener implements EventListener {
 
 
     @Override
-    public void eventFired(byte[] data) {
+    public void consume(byte[] data) {
 
-        if (data[1] == 125) {
-            System.out.println("PICTURE");
-            System.out.println(Arrays.toString(data));
-
-            try(FileOutputStream fileOutputStream = new FileOutputStream(new File(FRAME_JPG))) {
-                fileOutputStream.write(getJpeg(data));
-            } catch (IOException e) {
-                LOGGER.error("Could not generate jpg");
-            }
+        try(FileOutputStream fos = new FileOutputStream(new File(FRAME_JPG))) {
+            fos.write(getJpeg(data));
+        } catch (IOException e) {
+            LOGGER.error("Could not generate jpg");
         }
+    }
+
+
+    @Override
+    public boolean test(byte[] data) {
+
+        return data[1] == 125;
     }
 
 

@@ -20,7 +20,7 @@ public class BatteryListenerTest {
     private byte batteryState;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         sut = BatteryListener.batteryListener(b -> batteryState = b);
     }
@@ -30,8 +30,8 @@ public class BatteryListenerTest {
     public void testTestIsBatteryPacket() {
 
         byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, 0, 5, 1, -1, 11 };
-        boolean test = sut.test(tcpInPacket);
 
+        boolean test = sut.test(tcpInPacket);
         assertThat(test, is(true));
     }
 
@@ -40,8 +40,8 @@ public class BatteryListenerTest {
     public void testTestIsNoBatteryPacket() {
 
         byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 127, -1, 11 };
-        boolean test = sut.test(tcpInPacket);
 
+        boolean test = sut.test(tcpInPacket);
         assertThat(test, is(false));
     }
 
@@ -50,8 +50,8 @@ public class BatteryListenerTest {
     public void consume() {
 
         byte expectedByte = 11;
-
         byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, 0, 5, 1, -1, expectedByte };
+
         sut.consume(tcpInPacket);
         assertThat(batteryState, is(expectedByte));
     }

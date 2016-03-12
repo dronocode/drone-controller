@@ -22,10 +22,15 @@ public final class BatteryListener implements EventListener {
 
 
     @Override
-    public void eventFired(byte[] data) {
+    public void consume(byte[] data) {
 
-        if (filterProject(data, 0, 5, 1)) {
-            consumer.accept(data[11]);
-        }
+        consumer.accept(data[11]);
+    }
+
+
+    @Override
+    public boolean test(byte[] data) {
+
+        return filterProject(data, 0, 5, 1);
     }
 }

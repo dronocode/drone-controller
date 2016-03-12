@@ -20,7 +20,7 @@ public class PCMDListenerTest {
     private String pcmd;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         sut = PCMDListener.pcmdlistener(s -> pcmd = s);
     }
@@ -30,8 +30,8 @@ public class PCMDListenerTest {
     public void testTestIsBatteryPacket() {
 
         byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, 3, 1, 0, -1, 11 };
-        boolean test = sut.test(tcpInPacket);
 
+        boolean test = sut.test(tcpInPacket);
         assertThat(test, is(true));
     }
 
@@ -40,8 +40,8 @@ public class PCMDListenerTest {
     public void testTestIsNoBatteryPacket() {
 
         byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 127, -1, 11 };
-        boolean test = sut.test(tcpInPacket);
 
+        boolean test = sut.test(tcpInPacket);
         assertThat(test, is(false));
     }
 
@@ -50,6 +50,7 @@ public class PCMDListenerTest {
     public void consume() {
 
         byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, 0, 5, 1, -1, 11 };
+
         sut.consume(tcpInPacket);
         assertThat(pcmd, is("11"));
     }

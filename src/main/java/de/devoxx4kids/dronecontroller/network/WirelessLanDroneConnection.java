@@ -24,12 +24,14 @@ import java.net.DatagramSocket;
 import java.time.Clock;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 import static java.net.InetAddress.getByName;
 
+import static java.util.Arrays.copyOfRange;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 
@@ -137,6 +139,8 @@ public class WirelessLanDroneConnection implements DroneConnection {
 
                     byte[] data = packet.getData();
 
+                    LOGGER.info("Receiving Packet-Header: " + Arrays.toString(copyOfRange(data, 0, 12)));
+
                     // Answer with a Pong
                     if (data[1] == 126) {
                         LOGGER.debug("Ping");
@@ -152,7 +156,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
                         continue;
                     }
 
-                    eventListeners.stream().forEach(eventListener -> eventListener.eventFired(data));
+                    eventListeners.stream().filter(e -> e.test(data)).forEach(e -> e.consume(data));
                 }
             } catch (IOException e) {
                 LOGGER.error("Error occurred while receiving packets from the drone.");
