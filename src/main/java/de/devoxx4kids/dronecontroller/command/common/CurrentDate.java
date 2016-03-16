@@ -65,6 +65,6 @@ public final class CurrentDate implements CommonCommand {
     @Override
     public String toString() {
 
-        return "CurrentDate{" + clock.instant() + '}';
+        return "CurrentDate " + now(clock).format(ISO_DATE);
     }
 }

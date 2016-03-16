@@ -66,6 +66,6 @@ public final class CurrentTime implements CommonCommand {
     @Override
     public String toString() {
 
-        return "CurrentTime{" + clock.instant() + '}';
+        return "CurrentTime " + ZonedDateTime.now(clock).format(TIME_FORMATTER);
     }
 }

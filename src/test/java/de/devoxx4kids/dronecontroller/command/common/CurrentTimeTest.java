@@ -43,7 +43,7 @@ public class CurrentTimeTest {
     @Test
     public void testToString() {
 
-        assertThat(sut.toString(), is("CurrentTime{1970-01-01T00:00:00Z}"));
+        assertThat(sut.toString(), is("CurrentTime T010000+0100"));
     }
 
 

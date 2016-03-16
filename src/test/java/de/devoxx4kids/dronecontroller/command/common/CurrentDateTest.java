@@ -43,7 +43,7 @@ public class CurrentDateTest {
     @Test
     public void testToString() {
 
-        assertThat(sut.toString(), is("CurrentDate{1970-01-01T00:00:00Z}"));
+        assertThat(sut.toString(), is("CurrentDate 1970-01-01"));
     }
 
 
