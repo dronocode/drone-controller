@@ -11,27 +11,17 @@ public interface Command {
     /**
      * Returns the byte package of the specific command.
      *
-     * <p>A packet contains a header and a</p>
-     *
-     * <p>Header:</p>
-     *
-     * <ol>
-     * <li>the main protocol type/category {@link FrameType}</li>
-     * <li>extension of this type {@link ChannelType}
+     * <p>Packet structure:</p>
      *
      * <ul>
-     * <li>11 for Outgoing packages</li>
+     *   <li>1 - the main protocol type, see {@link PacketType}</li>
+     *   <li>2 - extension of this type {@link ChannelType}</li>
+     *   <li>3 - sequence number for this type</li>
+     *   <li>4 - packet-size including header</li>
+     *   <li>5 until end are packet dependent</li>
      * </ul>
-     * </li>
-     * <li>sequence number for this type</li>
-     * <li>packet-size including header</li>
-     * <li>unknown
      *
-     * <ul>
-     * <li>0 in the analyzed data</li>
-     * </ul>
-     * </li>
-     * </ol>
+     * <p>The first 4 bytes can be identified as header and until position 5 as body</p>
      *
      * @param  sequence  the increasing sequence number of the packets
      *
