@@ -1,15 +1,16 @@
 package de.devoxx4kids.dronecontroller.command.common;
 
 import de.devoxx4kids.dronecontroller.command.Acknowledge;
-import de.devoxx4kids.dronecontroller.command.ChannelType;
 import de.devoxx4kids.dronecontroller.command.CommandException;
 import de.devoxx4kids.dronecontroller.command.CommandKey;
-import de.devoxx4kids.dronecontroller.command.PacketType;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import java.time.Clock;
+
+import static de.devoxx4kids.dronecontroller.command.ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID;
+import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
 import static java.time.LocalDate.now;
 import static java.time.format.DateTimeFormatter.ISO_DATE;
@@ -39,9 +40,8 @@ public final class CurrentDate implements CommonCommand {
     public byte[] getBytes(int sequence) {
 
         byte[] header = {
-            (byte) PacketType.DATA_WITH_ACK.ordinal(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.getId(),
-            (byte) sequence, 15, 0, 0, 0, commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(),
-            0
+            DATA_WITH_ACK.toByte(), JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(), (byte) sequence, 15, 0, 0, 0,
+            commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0
         };
 
         try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {

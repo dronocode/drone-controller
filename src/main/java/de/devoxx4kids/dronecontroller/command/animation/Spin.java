@@ -30,7 +30,7 @@ public final class Spin implements Command {
     public byte[] getBytes(int sequence) {
 
         return new byte[] {
-                (byte) PacketType.DATA_WITH_ACK.ordinal(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.getId(),
+                (byte) PacketType.DATA_WITH_ACK.ordinal(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(),
                 (byte) sequence, 15, 0, 0, 0, commandKey.getProjectId(), commandKey.getClazzId(),
                 commandKey.getCommandId(), 0, 1, 0, 0, 0
             };

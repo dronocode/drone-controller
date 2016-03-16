@@ -39,7 +39,7 @@ public final class CurrentTime implements CommonCommand {
     public byte[] getBytes(int sequence) {
 
         byte[] header = {
-            (byte) PacketType.DATA_WITH_ACK.ordinal(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.getId(),
+            (byte) PacketType.DATA_WITH_ACK.ordinal(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(),
             (byte) sequence, 15, 0, 0, 0, commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(),
             0
         };

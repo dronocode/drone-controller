@@ -19,7 +19,7 @@ public enum ChannelType {
         this.id = (byte) id;
     }
 
-    public byte getId() {
+    public byte toByte() {
 
         return id;
     }

@@ -30,7 +30,7 @@ public final class Balance implements Command {
     public byte[] getBytes(int sequence) {
 
         return new byte[] {
-                DATA_WITH_ACK.toByte(), JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.getId(), (byte) sequence, 15, 0, 0, 0,
+                DATA_WITH_ACK.toByte(), JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(), (byte) sequence, 15, 0, 0, 0,
                 commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0, 0, 0, 0, 0
             };
     }

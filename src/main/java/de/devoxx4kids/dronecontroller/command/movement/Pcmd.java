@@ -91,7 +91,7 @@ public final class Pcmd implements Command {
         byte touchscreen = 1;
 
         return new byte[] {
-                DATA.toByte(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_NONACK_ID.getId(), (byte) sequence, 14, 0,
+                DATA.toByte(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_NONACK_ID.toByte(), (byte) sequence, 14, 0,
                 0, 0, commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0, touchscreen,
                 speed, turn
             };

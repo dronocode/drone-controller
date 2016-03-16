@@ -38,7 +38,7 @@ public final class Jump implements Command {
     public byte[] getBytes(int sequence) {
 
         return new byte[] {
-                DATA_WITH_ACK.toByte(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.getId(), (byte) sequence,
+                DATA_WITH_ACK.toByte(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(), (byte) sequence,
                 15, 0, 0, 0, commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0,
                 (byte) type.ordinal(), 0, 0, 0
             };
