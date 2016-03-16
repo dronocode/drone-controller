@@ -1,10 +1,11 @@
 package de.devoxx4kids.dronecontroller.command.flip;
 
 import de.devoxx4kids.dronecontroller.command.Acknowledge;
-import de.devoxx4kids.dronecontroller.command.ChannelType;
 import de.devoxx4kids.dronecontroller.command.Command;
 import de.devoxx4kids.dronecontroller.command.CommandKey;
-import de.devoxx4kids.dronecontroller.command.FrameType;
+
+import static de.devoxx4kids.dronecontroller.command.ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID;
+import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
 
 /**
@@ -29,8 +30,7 @@ public final class Balance implements Command {
     public byte[] getBytes(int sequence) {
 
         return new byte[] {
-                (byte) FrameType.ARNETWORKAL_FRAME_TYPE_DATA_WITH_ACK.ordinal(),
-                ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.getId(), (byte) sequence, 15, 0, 0, 0,
+                DATA_WITH_ACK.toByte(), JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.getId(), (byte) sequence, 15, 0, 0, 0,
                 commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0, 0, 0, 0, 0
             };
     }

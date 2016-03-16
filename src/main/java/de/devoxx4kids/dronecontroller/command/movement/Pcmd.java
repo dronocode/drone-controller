@@ -4,7 +4,8 @@ import de.devoxx4kids.dronecontroller.command.Acknowledge;
 import de.devoxx4kids.dronecontroller.command.ChannelType;
 import de.devoxx4kids.dronecontroller.command.Command;
 import de.devoxx4kids.dronecontroller.command.CommandKey;
-import de.devoxx4kids.dronecontroller.command.FrameType;
+
+import static de.devoxx4kids.dronecontroller.command.PacketType.DATA;
 
 import static java.lang.String.format;
 
@@ -90,10 +91,9 @@ public final class Pcmd implements Command {
         byte touchscreen = 1;
 
         return new byte[] {
-                (byte) FrameType.ARNETWORKAL_FRAME_TYPE_DATA.ordinal(),
-                ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_NONACK_ID.getId(), (byte) sequence, 14, 0, 0, 0,
-                commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0, touchscreen, speed,
-                turn
+                DATA.toByte(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_NONACK_ID.getId(), (byte) sequence, 14, 0,
+                0, 0, commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0, touchscreen,
+                speed, turn
             };
     }
 
