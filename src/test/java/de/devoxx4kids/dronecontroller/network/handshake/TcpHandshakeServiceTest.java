@@ -56,7 +56,7 @@ public class TcpHandshakeServiceTest {
     @Test
     public void shake() throws IOException {
 
-        HandshakeResponse handshakeResponse = sut.shake(new HandshakeRequest("wirelessLanName", "arsdk-0902._udp"));
+        HandshakeResponse handshakeResponse = sut.shake(new HandshakeRequest("wirelessLanName"));
         assertThat(handshakeResponse.getStatus(), is("0"));
         assertThat(handshakeResponse.getC2d_port(), is(54321));
         assertThat(handshakeResponse.getArstream_fragment_size(), is(65000));

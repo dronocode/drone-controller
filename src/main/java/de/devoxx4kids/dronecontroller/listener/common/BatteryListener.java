@@ -1,12 +1,14 @@
-package de.devoxx4kids.dronecontroller.listener;
+package de.devoxx4kids.dronecontroller.listener.common;
 
 import java.util.function.Consumer;
 
 
 /**
+ * [4, 126, 73, 12, 0, 0, 0, 0, 5, 1, 0, 50].
+ *
  * @author  Tobias Schneider
  */
-public final class BatteryListener implements EventListener {
+public final class BatteryListener implements CommonEventListener {
 
     private final Consumer<Byte> consumer;
 

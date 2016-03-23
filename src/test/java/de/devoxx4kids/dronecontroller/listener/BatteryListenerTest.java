@@ -1,5 +1,7 @@
 package de.devoxx4kids.dronecontroller.listener;
 
+import de.devoxx4kids.dronecontroller.listener.common.BatteryListener;
+
 import org.junit.Before;
 import org.junit.Test;
 

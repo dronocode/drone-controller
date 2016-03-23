@@ -2,6 +2,7 @@ package de.devoxx4kids.dronecontroller.command.multimedia;
 
 import de.devoxx4kids.dronecontroller.command.Acknowledge;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -15,6 +16,15 @@ import static org.junit.Assert.assertThat;
  * @author  Tobias Schneider
  */
 public class VideoStreamingTest {
+
+    private VideoStreaming sut;
+
+    @Before
+    public void setUp() throws Exception {
+
+        sut = VideoStreaming.enableVideoStreaming();
+    }
+
 
     @Test
     public void enableVideoStreamingGetBytes() {
@@ -39,8 +49,23 @@ public class VideoStreamingTest {
     @Test
     public void getAcknowledge() {
 
-        VideoStreaming sut = VideoStreaming.enableVideoStreaming();
         Acknowledge acknowledge = sut.getAcknowledge();
         assertThat(acknowledge, is(Acknowledge.AckAfter));
+    }
+
+
+    @Test
+    public void testToStringEnable() {
+
+        String string = VideoStreaming.enableVideoStreaming().toString();
+        assertThat(string, is("VideoStreaming On"));
+    }
+
+
+    @Test
+    public void testToStringDisable() {
+
+        String string = VideoStreaming.disableVideoStreaming().toString();
+        assertThat(string, is("VideoStreaming Off"));
     }
 }

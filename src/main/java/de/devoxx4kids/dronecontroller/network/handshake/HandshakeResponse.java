@@ -1,6 +1,9 @@
 package de.devoxx4kids.dronecontroller.network.handshake;
 
 /**
+ * Response from the drone after sending the {@link HandshakeRequest}.
+ *
+ * @author  Tobias Schneider
  * @author  Alexander Bischof
  */
 public class HandshakeResponse {

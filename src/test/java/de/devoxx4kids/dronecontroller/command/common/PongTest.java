@@ -22,7 +22,10 @@ public class PongTest {
     @Before
     public void setUp() throws Exception {
 
-        sut = Pong.pong(1);
+        byte data = 1;
+        byte sequenceNumber = 1;
+
+        sut = Pong.pong(data, sequenceNumber);
     }
 
 

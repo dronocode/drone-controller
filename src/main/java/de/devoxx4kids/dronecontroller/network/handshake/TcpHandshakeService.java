@@ -10,11 +10,12 @@ import java.io.StringWriter;
 
 import java.net.Socket;
 
-import static com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT;
-
 
 /**
- * Service for the Handshake and establishing the connection to the drone.
+ * Service to establish the connection.
+ *
+ * <p>Service for the Handshake and establishing the connection to the drone via TCP and JSON. The response contains all
+ * information that are needed to communicate with the drone</p>
  *
  * @author  Alexander Bischof
  * @author  Tobias Schneider
@@ -36,7 +37,6 @@ public class TcpHandshakeService implements HandShakeService {
     public HandshakeResponse shake(HandshakeRequest handshakeRequest) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(INDENT_OUTPUT, true);
 
         StringWriter shakeData = new StringWriter();
         objectMapper.writeValue(shakeData, handshakeRequest);

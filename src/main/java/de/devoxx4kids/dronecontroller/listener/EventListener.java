@@ -20,10 +20,4 @@ public interface EventListener {
      * @return  true if the packet could be consumed, false otherwise
      */
     boolean test(byte[] data);
-
-
-    default boolean filterProject(byte[] data, int project, int clazz, int cmd) {
-
-        return data[7] == project && data[8] == clazz && data[9] == cmd;
-    }
 }

@@ -1,4 +1,4 @@
-package de.devoxx4kids.dronecontroller.listener;
+package de.devoxx4kids.dronecontroller.listener.common;
 
 import java.util.function.Consumer;
 
@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 /**
  * @author  Tobias Schneider
  */
-public final class PCMDListener implements EventListener {
+public final class PCMDListener implements CommonEventListener {
 
     private final Consumer<String> consumer;
 

@@ -49,4 +49,11 @@ public final class VideoStreaming implements Command {
 
         return Acknowledge.AckAfter;
     }
+
+
+    @Override
+    public String toString() {
+
+        return "VideoStreaming " + (enable == 1 ? "On" : "Off");
+    }
 }

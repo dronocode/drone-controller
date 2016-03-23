@@ -1,4 +1,6 @@
-package de.devoxx4kids.dronecontroller.listener;
+package de.devoxx4kids.dronecontroller.listener.multimedia;
+
+import de.devoxx4kids.dronecontroller.listener.EventListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +11,16 @@ import java.io.IOException;
 
 import java.lang.invoke.MethodHandles;
 
+import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_LOW_LATENCY;
+
 
 /**
+ * <p>Wide angle - 640x480px, 15 frames per second</p>
+ *
+ * <p>Consumes the Packet:</p>
+ *
+ * <p>[3, 125, sequenceNumber, x, x, x, x, x, x, x, x, x, {Image Starting with -1 (FF), -40 (D8) }</p>
+ *
  * @author  Tobias Schneider
  */
 public class VideoListener implements EventListener {
@@ -44,7 +54,7 @@ public class VideoListener implements EventListener {
     @Override
     public boolean test(byte[] data) {
 
-        return data[1] == 125;
+        return data[0] == DATA_LOW_LATENCY.toByte() && data[1] == 125;
     }
 
 

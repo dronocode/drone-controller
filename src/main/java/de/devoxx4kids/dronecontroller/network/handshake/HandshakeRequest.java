@@ -1,29 +1,50 @@
 package de.devoxx4kids.dronecontroller.network.handshake;
 
 /**
+ * Request send to the drone to establish the connection and exchange information.
+ *
+ * <ul>
+ *   <li>controller name
+ *
+ *     <ul>
+ *       <li>The wireless lan name</li>
+ *     </ul>
+ *   </li>
+ *   <li>controller type
+ *
+ *     <ul>
+ *       <li>_arsdk-0902._udp</li>
+ *     </ul>
+ *   </li>
+ *   <li>d2c port - 54321
+ *
+ *     <ul>
+ *       <li>Describes the port where the drone has to send the UDP packets</li>
+ *     </ul>
+ *   </li>
+ * </ul>
+ *
+ * <p>This Request will be answered with {@link HandshakeResponse}</p>
+ *
  * @author  Alexander Bischof
+ * @author  Tobias Schneider
  */
-public class HandshakeRequest {
+public final class HandshakeRequest {
 
-    private String controller_name;
-    private String controller_type;
-    private int d2c_port = 54321;
+    private final String controller_name;
+    private final String controller_type;
+    private final int d2c_port;
 
-    public HandshakeRequest(String controller_name, String controller_type) {
+    public HandshakeRequest(String controller_name) {
 
         this.controller_name = controller_name;
-        this.controller_type = controller_type;
+        this.controller_type = "_arsdk-0902._udp";
+        this.d2c_port = 54321;
     }
 
     public String getController_name() {
 
         return controller_name;
-    }
-
-
-    public void setController_name(String controller_name) {
-
-        this.controller_name = controller_name;
     }
 
 
@@ -33,28 +54,16 @@ public class HandshakeRequest {
     }
 
 
-    public void setController_type(String controller_type) {
-
-        this.controller_type = controller_type;
-    }
-
-
     public int getD2c_port() {
 
         return d2c_port;
     }
 
 
-    public void setD2c_port(int d2c_port) {
-
-        this.d2c_port = d2c_port;
-    }
-
-
     @Override
     public String toString() {
 
-        return "DeviceInit{"
+        return "HandshakeRequest{"
             + "controller_name='" + controller_name + '\''
             + ", controller_type='" + controller_type + '\''
             + ", d2c_port=" + d2c_port + '}';
