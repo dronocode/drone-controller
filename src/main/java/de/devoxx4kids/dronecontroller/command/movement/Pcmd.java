@@ -86,7 +86,7 @@ public final class Pcmd implements Command {
 
 
     @Override
-    public byte[] getBytes(int sequence) {
+    public byte[] getPacket(int sequence) {
 
         byte touchscreen = 1;
 

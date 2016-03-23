@@ -30,7 +30,7 @@ public class VideoStreamingTest {
     public void enableVideoStreamingGetBytes() {
 
         VideoStreaming sut = VideoStreaming.enableVideoStreaming();
-        byte[] bytesPacket = sut.getBytes(1);
+        byte[] bytesPacket = sut.getPacket(1);
 
         assertThat(bytesPacket, is(new byte[] { 4, 11, 1, 12, 0, 0, 0, 3, 18, 0, 0, 1, 0 }));
     }
@@ -40,7 +40,7 @@ public class VideoStreamingTest {
     public void disableVideoStreamingGetBytes() {
 
         VideoStreaming sut = VideoStreaming.disableVideoStreaming();
-        byte[] bytesPacket = sut.getBytes(1);
+        byte[] bytesPacket = sut.getPacket(1);
 
         assertThat(bytesPacket, is(new byte[] { 4, 11, 1, 12, 0, 0, 0, 3, 18, 0, 0, 0, 0 }));
     }

@@ -43,7 +43,7 @@ public class VolumeTest {
     @Test
     public void volume() {
 
-        byte[] bytesPackage = sut.getBytes(1);
+        byte[] bytesPackage = sut.getPacket(1);
 
         assertThat(bytesPackage, is(new byte[] { 4, 11, 1, 12, 0, 0, 0, 3, 12, 0, 0, 50, 0 }));
     }

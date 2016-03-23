@@ -177,7 +177,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
                     try {
                         Command command = queue.take();
 
-                        byte[] packet = command.getBytes(changeAndGetCounter(command));
+                        byte[] packet = command.getPacket(changeAndGetCounter(command));
                         sumoSocket.send(new DatagramPacket(packet, packet.length, getByName(deviceIp), devicePort));
 
                         if (command instanceof Pong || command instanceof CurrentDate

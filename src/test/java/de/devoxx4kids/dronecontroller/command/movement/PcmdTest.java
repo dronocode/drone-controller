@@ -50,7 +50,7 @@ public class PcmdTest {
     @Test
     public void getBytesWIthCorrect180DegreeTo50Percent() {
 
-        byte[] bytesPackage = sut.getBytes(1);
+        byte[] bytesPackage = sut.getPacket(1);
 
         assertThat(bytesPackage, is(new byte[] { 2, 10, 1, 14, 0, 0, 0, 3, 0, 0, 0, 1, 40, 50 }));
     }

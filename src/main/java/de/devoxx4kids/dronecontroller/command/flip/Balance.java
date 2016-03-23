@@ -27,7 +27,7 @@ public final class Balance implements Command {
 
 
     @Override
-    public byte[] getBytes(int sequence) {
+    public byte[] getPacket(int sequence) {
 
         return new byte[] {
                 DATA_WITH_ACK.toByte(), JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(), (byte) sequence, 15, 0, 0, 0,

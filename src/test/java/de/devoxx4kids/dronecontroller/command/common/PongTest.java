@@ -33,7 +33,7 @@ public class PongTest {
     public void getBytes() {
 
         int notNeededCounter = 2;
-        byte[] bytesPackage = sut.getBytes(notNeededCounter);
+        byte[] bytesPackage = sut.getPacket(notNeededCounter);
 
         assertThat(bytesPackage, is(new byte[] { 1, -2, 1, 8, 0, 0, 0, 1 }));
     }

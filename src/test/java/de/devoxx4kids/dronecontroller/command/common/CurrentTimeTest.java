@@ -33,7 +33,7 @@ public class CurrentTimeTest {
     @Test
     public void getBytes() {
 
-        byte[] bytesPackage = sut.getBytes(1);
+        byte[] bytesPackage = sut.getPacket(1);
 
         assertThat(bytesPackage,
             is(new byte[] { 4, 11, 1, 15, 0, 0, 0, 0, 4, 1, 0, 84, 48, 49, 48, 48, 48, 48, 43, 48, 49, 48, 48, 0 }));

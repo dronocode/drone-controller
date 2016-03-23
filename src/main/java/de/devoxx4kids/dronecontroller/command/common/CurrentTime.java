@@ -36,7 +36,7 @@ public final class CurrentTime implements CommonCommand {
 
 
     @Override
-    public byte[] getBytes(int sequence) {
+    public byte[] getPacket(int sequence) {
 
         byte[] header = {
             (byte) PacketType.DATA_WITH_ACK.ordinal(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(),

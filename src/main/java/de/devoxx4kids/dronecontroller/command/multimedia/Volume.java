@@ -32,7 +32,7 @@ public final class Volume implements Command {
 
 
     @Override
-    public byte[] getBytes(int sequence) {
+    public byte[] getPacket(int sequence) {
 
         return new byte[] {
                 (byte) PacketType.DATA_WITH_ACK.ordinal(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(),

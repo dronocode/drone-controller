@@ -37,7 +37,7 @@ public final class Pong implements CommonCommand {
 
 
     @Override
-    public byte[] getBytes(int sequence) {
+    public byte[] getPacket(int sequence) {
 
         return new byte[] { ACK.toByte(), (byte) 0xfe, this.sequenceNumber, 8, 0, 0, 0, sequenceNumberToAck };
     }

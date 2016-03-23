@@ -27,7 +27,7 @@ public interface Command {
      *
      * @return  byte package of command
      */
-    byte[] getBytes(int sequence);
+    byte[] getPacket(int sequence);
 
 
     /**
