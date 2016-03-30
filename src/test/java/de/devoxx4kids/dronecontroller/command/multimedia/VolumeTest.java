@@ -1,9 +1,9 @@
 package de.devoxx4kids.dronecontroller.command.multimedia;
 
-import de.devoxx4kids.dronecontroller.command.Acknowledge;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
 import static org.hamcrest.CoreMatchers.is;
 
@@ -50,9 +50,9 @@ public class VolumeTest {
 
 
     @Test
-    public void getAcknowledge() {
+    public void getPacketType() {
 
-        assertThat(sut.getAcknowledge(), is(Acknowledge.AckBefore));
+        assertThat(sut.getPacketType(), is(DATA_WITH_ACK));
     }
 
 

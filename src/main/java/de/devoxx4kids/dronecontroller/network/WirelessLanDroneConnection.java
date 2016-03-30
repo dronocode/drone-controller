@@ -2,6 +2,7 @@ package de.devoxx4kids.dronecontroller.network;
 
 import de.devoxx4kids.dronecontroller.command.Command;
 import de.devoxx4kids.dronecontroller.command.CommandException;
+import de.devoxx4kids.dronecontroller.command.PacketType;
 import de.devoxx4kids.dronecontroller.command.common.CommonCommand;
 import de.devoxx4kids.dronecontroller.command.common.CurrentDate;
 import de.devoxx4kids.dronecontroller.command.common.CurrentTime;
@@ -57,11 +58,9 @@ public class WirelessLanDroneConnection implements DroneConnection {
     private final int tcpPort;
     private final String wirelessLanName;
     private final Clock clock;
+    private final byte[] nextSequenceNumbers;
 
     private int devicePort;
-    private byte packetTypeOne = 0;
-    private byte noAckCounter = 0;
-    private byte ackCounter = 0;
 
     public WirelessLanDroneConnection(String deviceIp, int tcpPort, String wirelessLanName) {
 
@@ -71,6 +70,8 @@ public class WirelessLanDroneConnection implements DroneConnection {
         this.tcpPort = tcpPort;
         this.wirelessLanName = wirelessLanName;
         this.clock = Clock.systemDefaultZone();
+
+        nextSequenceNumbers = new byte[PacketType.values().length];
     }
 
     @Override
@@ -152,7 +153,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
 
                     // Answer with a Pong
                     if (packet[0] == 4 || packet[0] == 2) {
-                        sendCommand(Pong.pong(packet[2], packetTypeOne++));
+                        sendCommand(Pong.pong(packet[2]));
 
                         continue;
                     }
@@ -177,7 +178,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
                     try {
                         Command command = queue.take();
 
-                        byte[] packet = command.getPacket(changeAndGetCounter(command));
+                        byte[] packet = command.getPacket(getNextSequenceNumber(command));
                         sumoSocket.send(new DatagramPacket(packet, packet.length, getByName(deviceIp), devicePort));
 
                         if (command instanceof Pong || command instanceof CurrentDate
@@ -201,29 +202,14 @@ public class WirelessLanDroneConnection implements DroneConnection {
     }
 
 
-    private int changeAndGetCounter(Command command) {
+    private synchronized int getNextSequenceNumber(final Command command) {
 
-        int counter = 0;
+        byte packetTypeId = command.getPacketType().toByte();
 
-        switch (command.getAcknowledge()) {
-            case AckBefore:
-                counter = ++ackCounter;
-                break;
+        byte nextSequenceNumber = nextSequenceNumbers[packetTypeId];
+        nextSequenceNumbers[packetTypeId] = (byte) (nextSequenceNumber + 1);
 
-            case AckAfter:
-                counter = ackCounter++;
-                break;
-
-            case NoAckBefore:
-                counter = ++noAckCounter;
-                break;
-
-            case None:
-            default:
-                break;
-        }
-
-        return counter;
+        return nextSequenceNumber;
     }
 
 

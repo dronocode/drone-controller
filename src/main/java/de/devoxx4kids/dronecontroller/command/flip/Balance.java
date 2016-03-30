@@ -1,8 +1,8 @@
 package de.devoxx4kids.dronecontroller.command.flip;
 
-import de.devoxx4kids.dronecontroller.command.Acknowledge;
 import de.devoxx4kids.dronecontroller.command.Command;
 import de.devoxx4kids.dronecontroller.command.CommandKey;
+import de.devoxx4kids.dronecontroller.command.PacketType;
 
 import static de.devoxx4kids.dronecontroller.command.ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID;
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
@@ -14,6 +14,7 @@ import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 public final class Balance implements Command {
 
     private final CommandKey commandKey = CommandKey.commandKey(3, 0, 1);
+    private final PacketType packetType = DATA_WITH_ACK;
 
     private Balance() {
 
@@ -27,19 +28,19 @@ public final class Balance implements Command {
 
 
     @Override
-    public byte[] getPacket(int sequence) {
+    public byte[] getPacket(int sequenceNumber) {
 
         return new byte[] {
-                DATA_WITH_ACK.toByte(), JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(), (byte) sequence, 15, 0, 0, 0,
-                commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0, 0, 0, 0, 0
+                packetType.toByte(), JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(), (byte) sequenceNumber, 15, 0, 0,
+                0, commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0, 0, 0, 0, 0
             };
     }
 
 
     @Override
-    public Acknowledge getAcknowledge() {
+    public PacketType getPacketType() {
 
-        return Acknowledge.AckBefore;
+        return packetType;
     }
 
 

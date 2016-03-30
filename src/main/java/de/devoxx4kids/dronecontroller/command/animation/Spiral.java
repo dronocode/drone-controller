@@ -1,10 +1,11 @@
 package de.devoxx4kids.dronecontroller.command.animation;
 
-import de.devoxx4kids.dronecontroller.command.Acknowledge;
 import de.devoxx4kids.dronecontroller.command.ChannelType;
 import de.devoxx4kids.dronecontroller.command.Command;
 import de.devoxx4kids.dronecontroller.command.CommandKey;
 import de.devoxx4kids.dronecontroller.command.PacketType;
+
+import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
 
 /**
@@ -14,6 +15,7 @@ import de.devoxx4kids.dronecontroller.command.PacketType;
 public final class Spiral implements Command {
 
     private final CommandKey commandKey = CommandKey.commandKey(3, 2, 4);
+    private final PacketType packetType = DATA_WITH_ACK;
 
     private Spiral() {
 
@@ -27,20 +29,20 @@ public final class Spiral implements Command {
 
 
     @Override
-    public byte[] getPacket(int sequence) {
+    public byte[] getPacket(int sequenceNumber) {
 
         return new byte[] {
-                (byte) PacketType.DATA_WITH_ACK.ordinal(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(),
-                (byte) sequence, 15, 0, 0, 0, commandKey.getProjectId(), commandKey.getClazzId(),
+                (byte) packetType.ordinal(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(),
+                (byte) sequenceNumber, 15, 0, 0, 0, commandKey.getProjectId(), commandKey.getClazzId(),
                 commandKey.getCommandId(), 0, 8, 0, 0, 0
             };
     }
 
 
     @Override
-    public Acknowledge getAcknowledge() {
+    public PacketType getPacketType() {
 
-        return Acknowledge.AckBefore;
+        return packetType;
     }
 
 

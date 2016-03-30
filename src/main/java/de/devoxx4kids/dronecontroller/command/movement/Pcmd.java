@@ -1,9 +1,9 @@
 package de.devoxx4kids.dronecontroller.command.movement;
 
-import de.devoxx4kids.dronecontroller.command.Acknowledge;
 import de.devoxx4kids.dronecontroller.command.ChannelType;
 import de.devoxx4kids.dronecontroller.command.Command;
 import de.devoxx4kids.dronecontroller.command.CommandKey;
+import de.devoxx4kids.dronecontroller.command.PacketType;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA;
 
@@ -24,6 +24,7 @@ public final class Pcmd implements Command {
     private final byte speed;
     private final byte turn;
     private final Integer waitingTime;
+    private final PacketType packetType = DATA;
 
     private Pcmd(int speed, int degrees, Integer waitingTime) {
 
@@ -86,22 +87,22 @@ public final class Pcmd implements Command {
 
 
     @Override
-    public byte[] getPacket(int sequence) {
+    public byte[] getPacket(int sequenceNumber) {
 
         byte touchscreen = 1;
 
         return new byte[] {
-                DATA.toByte(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_NONACK_ID.toByte(), (byte) sequence, 14, 0,
-                0, 0, commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0, touchscreen,
-                speed, turn
+                DATA.toByte(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_NONACK_ID.toByte(), (byte) sequenceNumber,
+                14, 0, 0, 0, commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0,
+                touchscreen, speed, turn
             };
     }
 
 
     @Override
-    public Acknowledge getAcknowledge() {
+    public PacketType getPacketType() {
 
-        return Acknowledge.NoAckBefore;
+        return packetType;
     }
 
 

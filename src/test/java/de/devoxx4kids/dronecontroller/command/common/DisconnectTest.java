@@ -1,9 +1,11 @@
 package de.devoxx4kids.dronecontroller.command.common;
 
-import de.devoxx4kids.dronecontroller.command.Acknowledge;
+import de.devoxx4kids.dronecontroller.command.PacketType;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
 import static org.hamcrest.CoreMatchers.is;
 
@@ -43,11 +45,11 @@ public class DisconnectTest {
 
 
     @Test
-    public void getAcknowledge() {
+    public void getPacketType() {
 
-        Acknowledge acknowledge = sut.getAcknowledge();
+        PacketType packetType = sut.getPacketType();
 
-        assertThat(acknowledge, is(Acknowledge.AckAfter));
+        assertThat(packetType, is(DATA_WITH_ACK));
     }
 
 

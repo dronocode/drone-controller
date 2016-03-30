@@ -1,8 +1,8 @@
 package de.devoxx4kids.dronecontroller.command.common;
 
-import de.devoxx4kids.dronecontroller.command.Acknowledge;
 import de.devoxx4kids.dronecontroller.command.CommandException;
 import de.devoxx4kids.dronecontroller.command.CommandKey;
+import de.devoxx4kids.dronecontroller.command.PacketType;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,6 +24,7 @@ public final class CurrentDate implements CommonCommand {
 
     private final CommandKey commandKey = CommandKey.commandKey(0, 4, 0);
     private final Clock clock;
+    private final PacketType packetType = DATA_WITH_ACK;
 
     private CurrentDate(Clock clock) {
 
@@ -37,10 +38,10 @@ public final class CurrentDate implements CommonCommand {
 
 
     @Override
-    public byte[] getPacket(int sequence) {
+    public byte[] getPacket(int sequenceNumber) {
 
         byte[] header = {
-            DATA_WITH_ACK.toByte(), JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(), (byte) sequence, 15, 0, 0, 0,
+            packetType.toByte(), JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(), (byte) sequenceNumber, 15, 0, 0, 0,
             commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0
         };
 
@@ -56,9 +57,9 @@ public final class CurrentDate implements CommonCommand {
 
 
     @Override
-    public Acknowledge getAcknowledge() {
+    public PacketType getPacketType() {
 
-        return Acknowledge.AckAfter;
+        return packetType;
     }
 
 

@@ -1,9 +1,11 @@
 package de.devoxx4kids.dronecontroller.command.common;
 
-import de.devoxx4kids.dronecontroller.command.Acknowledge;
+import de.devoxx4kids.dronecontroller.command.PacketType;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import static de.devoxx4kids.dronecontroller.command.PacketType.ACK;
 
 import static org.hamcrest.CoreMatchers.is;
 
@@ -23,19 +25,18 @@ public class PongTest {
     public void setUp() throws Exception {
 
         byte data = 1;
-        byte sequenceNumber = 1;
 
-        sut = Pong.pong(data, sequenceNumber);
+        sut = Pong.pong(data);
     }
 
 
     @Test
     public void getBytes() {
 
-        int notNeededCounter = 2;
-        byte[] bytesPackage = sut.getPacket(notNeededCounter);
+        int sequenceNumber = 2;
+        byte[] bytesPackage = sut.getPacket(sequenceNumber);
 
-        assertThat(bytesPackage, is(new byte[] { 1, -2, 1, 8, 0, 0, 0, 1 }));
+        assertThat(bytesPackage, is(new byte[] { 1, -2, 2, 8, 0, 0, 0, 1 }));
     }
 
 
@@ -47,11 +48,11 @@ public class PongTest {
 
 
     @Test
-    public void getAcknowledge() {
+    public void getPacketType() {
 
-        Acknowledge acknowledge = sut.getAcknowledge();
+        PacketType packetType = sut.getPacketType();
 
-        assertThat(acknowledge, is(Acknowledge.None));
+        assertThat(packetType, is(ACK));
     }
 
 

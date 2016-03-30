@@ -18,9 +18,8 @@ public class CommonCommandTest {
     public void waitingTime() {
 
         byte data = 1;
-        byte sequenceNumber = 2;
 
-        int waitingTime = Pong.pong(data, sequenceNumber).waitingTime();
+        int waitingTime = Pong.pong(data).waitingTime();
         assertThat(waitingTime, is(100));
     }
 }

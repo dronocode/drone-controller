@@ -1,6 +1,5 @@
 package de.devoxx4kids.dronecontroller.command.common;
 
-import de.devoxx4kids.dronecontroller.command.Acknowledge;
 import de.devoxx4kids.dronecontroller.command.ChannelType;
 import de.devoxx4kids.dronecontroller.command.CommandException;
 import de.devoxx4kids.dronecontroller.command.CommandKey;
@@ -13,6 +12,8 @@ import java.time.Clock;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
+
 
 /**
  * @author  Alexander Bischof
@@ -23,6 +24,7 @@ public final class CurrentTime implements CommonCommand {
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("'T'HHmmssZZZ");
     private final CommandKey commandKey = CommandKey.commandKey(0, 4, 1);
     private final Clock clock;
+    private final PacketType packetType = DATA_WITH_ACK;
 
     private CurrentTime(Clock clock) {
 
@@ -36,12 +38,12 @@ public final class CurrentTime implements CommonCommand {
 
 
     @Override
-    public byte[] getPacket(int sequence) {
+    public byte[] getPacket(int sequenceNumber) {
 
         byte[] header = {
-            (byte) PacketType.DATA_WITH_ACK.ordinal(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(),
-            (byte) sequence, 15, 0, 0, 0, commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(),
-            0
+            (byte) packetType.ordinal(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(),
+            (byte) sequenceNumber, 15, 0, 0, 0, commandKey.getProjectId(), commandKey.getClazzId(),
+            commandKey.getCommandId(), 0
         };
 
         try(ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
@@ -57,9 +59,9 @@ public final class CurrentTime implements CommonCommand {
 
 
     @Override
-    public Acknowledge getAcknowledge() {
+    public PacketType getPacketType() {
 
-        return Acknowledge.AckAfter;
+        return packetType;
     }
 
 

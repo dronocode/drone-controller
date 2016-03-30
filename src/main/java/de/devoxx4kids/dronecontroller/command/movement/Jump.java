@@ -1,9 +1,9 @@
 package de.devoxx4kids.dronecontroller.command.movement;
 
-import de.devoxx4kids.dronecontroller.command.Acknowledge;
 import de.devoxx4kids.dronecontroller.command.ChannelType;
 import de.devoxx4kids.dronecontroller.command.Command;
 import de.devoxx4kids.dronecontroller.command.CommandKey;
+import de.devoxx4kids.dronecontroller.command.PacketType;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
@@ -22,6 +22,7 @@ public final class Jump implements Command {
 
     private final CommandKey commandKey = CommandKey.commandKey(3, 2, 3);
     private final Type type;
+    private final PacketType packetType = DATA_WITH_ACK;
 
     private Jump(Type type) {
 
@@ -35,20 +36,20 @@ public final class Jump implements Command {
 
 
     @Override
-    public byte[] getPacket(int sequence) {
+    public byte[] getPacket(int sequenceNumber) {
 
         return new byte[] {
-                DATA_WITH_ACK.toByte(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(), (byte) sequence,
-                15, 0, 0, 0, commandKey.getProjectId(), commandKey.getClazzId(), commandKey.getCommandId(), 0,
-                (byte) type.ordinal(), 0, 0, 0
+                DATA_WITH_ACK.toByte(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(),
+                (byte) sequenceNumber, 15, 0, 0, 0, commandKey.getProjectId(), commandKey.getClazzId(),
+                commandKey.getCommandId(), 0, (byte) type.ordinal(), 0, 0, 0
             };
     }
 
 
     @Override
-    public Acknowledge getAcknowledge() {
+    public PacketType getPacketType() {
 
-        return Acknowledge.AckBefore;
+        return packetType;
     }
 
 

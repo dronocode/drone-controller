@@ -1,6 +1,6 @@
 package de.devoxx4kids.dronecontroller.command.common;
 
-import de.devoxx4kids.dronecontroller.command.Acknowledge;
+import de.devoxx4kids.dronecontroller.command.PacketType;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.ACK;
 
@@ -21,32 +21,31 @@ import static de.devoxx4kids.dronecontroller.command.PacketType.ACK;
  */
 public final class Pong implements CommonCommand {
 
-    private final byte sequenceNumber;
     private final byte sequenceNumberToAck;
+    private final PacketType packetType = ACK;
 
-    private Pong(byte data, byte sequenceNumber) {
+    private Pong(byte sequenceNumberToAck) {
 
-        this.sequenceNumberToAck = data;
-        this.sequenceNumber = sequenceNumber;
+        this.sequenceNumberToAck = sequenceNumberToAck;
     }
 
-    public static Pong pong(byte sequenceNumberToAck, byte sequenceNumber) {
+    public static Pong pong(byte sequenceNumberToAck) {
 
-        return new Pong(sequenceNumberToAck, sequenceNumber);
-    }
-
-
-    @Override
-    public byte[] getPacket(int sequence) {
-
-        return new byte[] { ACK.toByte(), (byte) 0xfe, this.sequenceNumber, 8, 0, 0, 0, sequenceNumberToAck };
+        return new Pong(sequenceNumberToAck);
     }
 
 
     @Override
-    public Acknowledge getAcknowledge() {
+    public byte[] getPacket(int sequenceNumber) {
 
-        return Acknowledge.None;
+        return new byte[] { packetType.toByte(), (byte) 0xfe, (byte) sequenceNumber, 8, 0, 0, 0, sequenceNumberToAck };
+    }
+
+
+    @Override
+    public PacketType getPacketType() {
+
+        return packetType;
     }
 
 
