@@ -146,8 +146,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
                     byte[] packet = datagramPacket.getData();
 
                     LOGGER.debug("Receiving Packet: {}",
-                        Arrays.toString(
-                            copyOfRange(convertPacket(packet), 0, signedTwoComplementIntegerToUnsigned(packet[3]))));
+                        Arrays.toString(copyOfRange(convertPacket(packet), 0, convertByte(packet[3]))));
                     LOGGER.debug("---------");
                     commonEventListeners.stream().filter(e -> e.test(packet)).forEach(e -> e.consume(packet));
 
@@ -185,8 +184,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
                                 || command instanceof CurrentTime) {
                             LOGGER.debug("Sending command: {}", command);
                             LOGGER.debug("Sending Packet: {}",
-                                Arrays.toString(
-                                    copyOfRange(packet, 0, signedTwoComplementIntegerToUnsigned(packet[3]))));
+                                Arrays.toString(copyOfRange(packet, 0, convertByte(packet[3]))));
                             LOGGER.debug("---------");
                         }
 
@@ -218,14 +216,21 @@ public class WirelessLanDroneConnection implements DroneConnection {
         byte[] newArray = new byte[packets.length - 1];
 
         for (int i = 0; i < packets.length - 1; i++) {
-            newArray[i] = (byte) (packets[i] & 0xFF);
+            newArray[i] = (byte) (convertByte(packets[i]));
         }
 
         return newArray;
     }
 
 
-    private int signedTwoComplementIntegerToUnsigned(byte b) {
+    /**
+     * Converts a signed two complement byte, as used in java, to a decimal.
+     *
+     * @param  b  byte to convert into decimal system
+     *
+     * @return  converted byte into decimal system
+     */
+    private int convertByte(byte b) {
 
         return b & 0xFF;
     }
