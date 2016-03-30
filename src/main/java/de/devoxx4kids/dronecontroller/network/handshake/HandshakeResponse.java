@@ -103,11 +103,12 @@ public class HandshakeResponse {
     @Override
     public String toString() {
 
-        return "DeviceAnswer{"
+        return "HandshakeResponse{"
             + "status='" + status + '\''
             + ", c2d_port=" + c2d_port
             + ", arstream_fragment_size=" + arstream_fragment_size
             + ", arstream_fragment_maximum_number=" + arstream_fragment_maximum_number
+            + ", arstream_max_ack_interval=" + arstream_max_ack_interval
             + ", c2d_update_port=" + c2d_update_port
             + ", c2d_user_port=" + c2d_user_port + '}';
     }
