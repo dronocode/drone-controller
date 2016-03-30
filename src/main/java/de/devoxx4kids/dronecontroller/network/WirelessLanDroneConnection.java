@@ -4,8 +4,6 @@ import de.devoxx4kids.dronecontroller.command.Command;
 import de.devoxx4kids.dronecontroller.command.CommandException;
 import de.devoxx4kids.dronecontroller.command.PacketType;
 import de.devoxx4kids.dronecontroller.command.common.CommonCommand;
-import de.devoxx4kids.dronecontroller.command.common.CurrentDate;
-import de.devoxx4kids.dronecontroller.command.common.CurrentTime;
 import de.devoxx4kids.dronecontroller.command.common.Pong;
 import de.devoxx4kids.dronecontroller.listener.EventListener;
 import de.devoxx4kids.dronecontroller.listener.common.CommonEventListener;
@@ -144,10 +142,8 @@ public class WirelessLanDroneConnection implements DroneConnection {
                     sumoSocket.receive(datagramPacket);
 
                     byte[] packet = datagramPacket.getData();
+                    LOGGER.debug("Receiving packet {}", convertAndCutPacket(packet, false));
 
-                    LOGGER.debug("Receiving Packet: {}",
-                        Arrays.toString(copyOfRange(convertPacket(packet), 0, convertByte(packet[3]))));
-                    LOGGER.debug("---------");
                     commonEventListeners.stream().filter(e -> e.test(packet)).forEach(e -> e.consume(packet));
 
                     // Answer with a Pong
@@ -176,17 +172,10 @@ public class WirelessLanDroneConnection implements DroneConnection {
                 while (true) {
                     try {
                         Command command = queue.take();
-
                         byte[] packet = command.getPacket(getNextSequenceNumber(command));
-                        sumoSocket.send(new DatagramPacket(packet, packet.length, getByName(deviceIp), devicePort));
 
-                        if (command instanceof Pong || command instanceof CurrentDate
-                                || command instanceof CurrentTime) {
-                            LOGGER.debug("Sending command: {}", command);
-                            LOGGER.debug("Sending Packet: {}",
-                                Arrays.toString(copyOfRange(packet, 0, convertByte(packet[3]))));
-                            LOGGER.debug("---------");
-                        }
+                        LOGGER.debug("Sending command '{}' with packet {}", command, convertAndCutPacket(packet, false));
+                        sumoSocket.send(new DatagramPacket(packet, packet.length, getByName(deviceIp), devicePort));
 
                         MILLISECONDS.sleep(command.waitingTime());
                     } catch (InterruptedException e) {
@@ -211,15 +200,23 @@ public class WirelessLanDroneConnection implements DroneConnection {
     }
 
 
-    private byte[] convertPacket(byte[] packets) {
+    /**
+     * Converts the complete packet into decimals and cuts off all parts without information.
+     *
+     * @param  packet  to convert and cut
+     * @param  toDecimal  convert packet to decimal
+     *
+     * @return  converter and cut packet
+     */
+    private String convertAndCutPacket(byte[] packet, boolean toDecimal) {
 
-        byte[] newArray = new byte[packets.length - 1];
+        byte[] thisPacket = packet.clone();
 
-        for (int i = 0; i < packets.length - 1; i++) {
-            newArray[i] = (byte) (convertByte(packets[i]));
+        if (toDecimal) {
+            thisPacket = convertPacket(thisPacket);
         }
 
-        return newArray;
+        return Arrays.toString(copyOfRange(thisPacket, 0, convertByte(packet[3])));
     }
 
 
@@ -233,5 +230,17 @@ public class WirelessLanDroneConnection implements DroneConnection {
     private int convertByte(byte b) {
 
         return b & 0xFF;
+    }
+
+
+    private byte[] convertPacket(byte[] packets) {
+
+        byte[] newArray = new byte[packets.length - 1];
+
+        for (int i = 0; i < packets.length - 1; i++) {
+            newArray[i] = (byte) (convertByte(packets[i]));
+        }
+
+        return newArray;
     }
 }
