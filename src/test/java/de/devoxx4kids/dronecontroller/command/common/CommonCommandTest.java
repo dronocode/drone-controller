@@ -1,10 +1,13 @@
 package de.devoxx4kids.dronecontroller.command.common;
 
-import org.junit.Test;
+import org.junit.gen5.api.Test;
+import org.junit.gen5.junit4.runner.JUnit5;
 
-import static org.hamcrest.CoreMatchers.is;
+import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.hamcrest.core.Is.is;
 
 
 /**
@@ -12,10 +15,11 @@ import static org.junit.Assert.assertThat;
  *
  * @author  Tobias Schneider
  */
-public class CommonCommandTest {
+@RunWith(JUnit5.class)
+class CommonCommandTest {
 
     @Test
-    public void waitingTime() {
+    void waitingTime() {
 
         byte data = 1;
 

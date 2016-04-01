@@ -2,12 +2,15 @@ package de.devoxx4kids.dronecontroller.listener;
 
 import de.devoxx4kids.dronecontroller.listener.multimedia.VideoListener;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
+import org.junit.gen5.junit4.runner.JUnit5;
+
+import org.junit.runner.RunWith;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import static org.hamcrest.core.Is.is;
-
-import static org.junit.Assert.assertThat;
 
 
 /**
@@ -15,24 +18,25 @@ import static org.junit.Assert.assertThat;
  *
  * @author  Tobias Schneider
  */
-public class VideoListenerTest {
+@RunWith(JUnit5.class)
+class VideoListenerTest {
 
     private VideoListener sut;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void initialize() {
 
         sut = VideoListener.videoListener();
     }
 
 
     @Test
-    public void consume() {
+    void consume() {
     }
 
 
     @Test
-    public void testTestIsVideoPacket() {
+    void testTestIsVideoPacket() {
 
         byte[] tcpInPacket = new byte[] { 3, 125, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, };
 
@@ -42,7 +46,7 @@ public class VideoListenerTest {
 
 
     @Test
-    public void testTestIsNoVideoPacket() {
+    void testTestIsNoVideoPacket() {
 
         byte[] tcpInPacket = new byte[] { 1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, };
 

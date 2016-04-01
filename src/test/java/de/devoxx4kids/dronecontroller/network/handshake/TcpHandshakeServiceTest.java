@@ -1,13 +1,14 @@
 package de.devoxx4kids.dronecontroller.network.handshake;
 
-import org.junit.Before;
-import org.junit.Test;
+import mockito.InjectMock;
+import mockito.MockitoExtension;
+
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
+import org.junit.gen5.api.extension.ExtendWith;
+import org.junit.gen5.junit4.runner.JUnit5;
 
 import org.junit.runner.RunWith;
-
-import org.mockito.Mock;
-
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,16 +29,14 @@ import static org.mockito.Mockito.when;
  *
  * @author  Tobias Schneider - schneider@synyx.de
  */
-@RunWith(MockitoJUnitRunner.class)
-public class TcpHandshakeServiceTest {
+@RunWith(JUnit5.class)
+@ExtendWith(MockitoExtension.class)
+class TcpHandshakeServiceTest {
 
     private TcpHandshakeService sut;
 
-    @Mock
-    private Socket socketMock;
-
-    @Before
-    public void setUp() throws IOException {
+    @BeforeEach
+    void initialize(@InjectMock Socket socketMock) throws IOException {
 
         when(socketMock.getOutputStream()).thenReturn(new ByteArrayOutputStream());
         when(socketMock.getInputStream()).thenReturn(new ByteArrayInputStream(getJsonAsBytes()));
@@ -54,7 +53,7 @@ public class TcpHandshakeServiceTest {
 
 
     @Test
-    public void shake() throws IOException {
+    void shake() throws IOException {
 
         HandshakeResponse handshakeResponse = sut.shake(new HandshakeRequest("wirelessLanName"));
         assertThat(handshakeResponse.getStatus(), is("0"));
@@ -68,7 +67,7 @@ public class TcpHandshakeServiceTest {
 
 
     @Test
-    public void createSocket() throws IOException {
+    void createSocket() throws IOException {
 
         Socket socket = sut.createSocket("", 1);
         assertThat(socket, is(instanceOf(Socket.class)));

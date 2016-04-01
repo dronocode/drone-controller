@@ -2,8 +2,11 @@ package de.devoxx4kids.dronecontroller.command.movement;
 
 import de.devoxx4kids.dronecontroller.command.PacketType;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
+import org.junit.gen5.junit4.runner.JUnit5;
+
+import org.junit.runner.RunWith;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
@@ -17,19 +20,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author  Tobias Schneider
  */
-public class JumpMotorProblemChangedTest {
+@RunWith(JUnit5.class)
+class JumpMotorProblemChangedTest {
 
     private JumpMotorProblemChanged sut;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void initialize() {
 
         sut = JumpMotorProblemChanged.jumpMotorProblemChanged();
     }
 
 
     @Test
-    public void getBytes() {
+    void getBytes() {
 
         byte[] bytesPackage = sut.getPacket(1);
         assertThat(bytesPackage, is(new byte[] { 4, 11, 1, 15, 0, 0, 0, 3, 3, 2, 0, 1, 0, 0, 0 }));
@@ -37,7 +41,7 @@ public class JumpMotorProblemChangedTest {
 
 
     @Test
-    public void getPacketType() {
+    void getPacketType() {
 
         PacketType packetType = sut.getPacketType();
 
@@ -46,14 +50,14 @@ public class JumpMotorProblemChangedTest {
 
 
     @Test
-    public void testToString() {
+    void testToString() {
 
         assertThat(sut.toString(), is("JumpMotorProblemChanged"));
     }
 
 
     @Test
-    public void waitingTime() {
+    void waitingTime() {
 
         int waitingTime = sut.waitingTime();
 

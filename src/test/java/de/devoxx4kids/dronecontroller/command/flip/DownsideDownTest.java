@@ -2,8 +2,11 @@ package de.devoxx4kids.dronecontroller.command.flip;
 
 import de.devoxx4kids.dronecontroller.command.PacketType;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
+import org.junit.gen5.junit4.runner.JUnit5;
+
+import org.junit.runner.RunWith;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
@@ -17,19 +20,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author  Tobias Schneider
  */
-public class DownsideDownTest {
+@RunWith(JUnit5.class)
+class DownsideDownTest {
 
     private DownsideDown sut;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void initialize() {
 
         sut = DownsideDown.downsideDown();
     }
 
 
     @Test
-    public void getBytes() {
+    void getBytes() {
 
         byte[] bytesPackage = sut.getPacket(1);
 
@@ -38,14 +42,14 @@ public class DownsideDownTest {
 
 
     @Test
-    public void testToString() {
+    void testToString() {
 
         assertThat(sut.toString(), is("DownsideDown"));
     }
 
 
     @Test
-    public void getPacketType() {
+    void getPacketType() {
 
         PacketType packetType = sut.getPacketType();
 
@@ -54,7 +58,7 @@ public class DownsideDownTest {
 
 
     @Test
-    public void waitingTime() {
+    void waitingTime() {
 
         int waitingTime = sut.waitingTime();
 

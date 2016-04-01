@@ -2,8 +2,11 @@ package de.devoxx4kids.dronecontroller.command.common;
 
 import de.devoxx4kids.dronecontroller.command.PacketType;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
+import org.junit.gen5.junit4.runner.JUnit5;
+
+import org.junit.runner.RunWith;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.ACK;
 
@@ -17,12 +20,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author  Tobias Schneider
  */
-public class PongTest {
+@RunWith(JUnit5.class)
+class PongTest {
 
     private Pong sut;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void initialize() {
 
         byte data = 1;
 
@@ -31,7 +35,7 @@ public class PongTest {
 
 
     @Test
-    public void getBytes() {
+    void getBytes() {
 
         int sequenceNumber = 2;
         byte[] bytesPackage = sut.getPacket(sequenceNumber);
@@ -41,14 +45,14 @@ public class PongTest {
 
 
     @Test
-    public void testToString() {
+    void testToString() {
 
         assertThat(sut.toString(), is("Pong"));
     }
 
 
     @Test
-    public void getPacketType() {
+    void getPacketType() {
 
         PacketType packetType = sut.getPacketType();
 
@@ -57,7 +61,7 @@ public class PongTest {
 
 
     @Test
-    public void waitingTime() {
+    void waitingTime() {
 
         int waitingTime = sut.waitingTime();
 

@@ -1,7 +1,10 @@
 package de.devoxx4kids.dronecontroller.command.multimedia;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
+import org.junit.gen5.junit4.runner.JUnit5;
+
+import org.junit.runner.RunWith;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
@@ -9,39 +12,42 @@ import static org.hamcrest.CoreMatchers.is;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import static org.junit.gen5.api.Assertions.expectThrows;
+
 
 /**
  * Unit test of {@link Volume}.
  *
  * @author  Tobias Schneider
  */
-public class VolumeTest {
+@RunWith(JUnit5.class)
+class VolumeTest {
 
     private Volume sut;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void initialize() {
 
         sut = Volume.volume(50);
     }
 
 
-    @Test(expected = IllegalArgumentException.class)
-    public void volumeToLow() {
+    @Test
+    void volumeToLow() {
 
-        Volume.volume(-1);
-    }
-
-
-    @Test(expected = IllegalArgumentException.class)
-    public void volumeToHigh() {
-
-        Volume.volume(101);
+        expectThrows(IllegalArgumentException.class, () -> Volume.volume(-1));
     }
 
 
     @Test
-    public void volume() {
+    void volumeToHigh() {
+
+        expectThrows(IllegalArgumentException.class, () -> Volume.volume(101));
+    }
+
+
+    @Test
+    void volume() {
 
         byte[] bytesPackage = sut.getPacket(1);
 
@@ -50,14 +56,14 @@ public class VolumeTest {
 
 
     @Test
-    public void getPacketType() {
+    void getPacketType() {
 
         assertThat(sut.getPacketType(), is(DATA_WITH_ACK));
     }
 
 
     @Test
-    public void testToString() {
+    void testToString() {
 
         assertThat(sut.toString(), is("Volume{volume=50}"));
     }

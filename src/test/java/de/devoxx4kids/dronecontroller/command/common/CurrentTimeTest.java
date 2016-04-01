@@ -2,8 +2,11 @@ package de.devoxx4kids.dronecontroller.command.common;
 
 import de.devoxx4kids.dronecontroller.command.PacketType;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
+import org.junit.gen5.junit4.runner.JUnit5;
+
+import org.junit.runner.RunWith;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -11,9 +14,9 @@ import java.time.ZoneId;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
-import static org.hamcrest.CoreMatchers.is;
-
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.hamcrest.core.Is.is;
 
 
 /**
@@ -21,19 +24,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author  Tobias Schneider
  */
-public class CurrentTimeTest {
+@RunWith(JUnit5.class)
+class CurrentTimeTest {
 
     private CurrentTime sut;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void initialize() {
 
         sut = CurrentTime.currentTime(Clock.fixed(Instant.EPOCH, ZoneId.of("Europe/Berlin")));
     }
 
 
     @Test
-    public void getBytes() {
+    void getBytes() {
 
         byte[] bytesPackage = sut.getPacket(1);
 
@@ -43,14 +47,14 @@ public class CurrentTimeTest {
 
 
     @Test
-    public void testToString() {
+    void testToString() {
 
         assertThat(sut.toString(), is("CurrentTime T010000+0100"));
     }
 
 
     @Test
-    public void getPacketType() {
+    void getPacketType() {
 
         PacketType packetType = sut.getPacketType();
 
@@ -59,7 +63,7 @@ public class CurrentTimeTest {
 
 
     @Test
-    public void waitingTime() {
+    void waitingTime() {
 
         int waitingTime = sut.waitingTime();
 

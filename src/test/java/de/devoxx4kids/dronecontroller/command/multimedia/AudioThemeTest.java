@@ -1,13 +1,16 @@
 package de.devoxx4kids.dronecontroller.command.multimedia;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
+import org.junit.gen5.junit4.runner.JUnit5;
+
+import org.junit.runner.RunWith;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
-import static org.hamcrest.CoreMatchers.is;
-
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.hamcrest.core.Is.is;
 
 
 /**
@@ -15,19 +18,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author  Tobias Schneider
  */
-public class AudioThemeTest {
+@RunWith(JUnit5.class)
+class AudioThemeTest {
 
     private AudioTheme sut;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void initialize() {
 
         sut = AudioTheme.audioTheme(AudioTheme.Theme.Default);
     }
 
 
     @Test
-    public void themes() {
+    void themes() {
 
         assertThat(AudioTheme.Theme.Default.ordinal(), is(0));
         assertThat(AudioTheme.Theme.Robot.ordinal(), is(1));
@@ -37,7 +41,7 @@ public class AudioThemeTest {
 
 
     @Test
-    public void getBytes() {
+    void getBytes() {
 
         byte[] bytesPackage = sut.getPacket(1);
 
@@ -46,14 +50,14 @@ public class AudioThemeTest {
 
 
     @Test
-    public void getPacketType() {
+    void getPacketType() {
 
         assertThat(sut.getPacketType(), is(DATA_WITH_ACK));
     }
 
 
     @Test
-    public void testToString() {
+    void testToString() {
 
         assertThat(sut.toString(), is("AudioTheme{theme=Default}"));
     }

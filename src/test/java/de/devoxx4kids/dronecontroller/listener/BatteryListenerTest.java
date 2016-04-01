@@ -2,12 +2,15 @@ package de.devoxx4kids.dronecontroller.listener;
 
 import de.devoxx4kids.dronecontroller.listener.common.BatteryListener;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
+import org.junit.gen5.junit4.runner.JUnit5;
+
+import org.junit.runner.RunWith;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import static org.hamcrest.core.Is.is;
-
-import static org.junit.Assert.assertThat;
 
 
 /**
@@ -15,21 +18,22 @@ import static org.junit.Assert.assertThat;
  *
  * @author  Tobias Schneider
  */
-public class BatteryListenerTest {
+@RunWith(JUnit5.class)
+class BatteryListenerTest {
 
     private BatteryListener sut;
 
     private byte batteryState;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void initialize() {
 
         sut = BatteryListener.batteryListener(b -> batteryState = b);
     }
 
 
     @Test
-    public void testTestIsBatteryPacket() {
+    void testTestIsBatteryPacket() {
 
         byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, 0, 5, 1, -1, 11 };
 
@@ -39,7 +43,7 @@ public class BatteryListenerTest {
 
 
     @Test
-    public void testTestIsNoBatteryPacket() {
+    void testTestIsNoBatteryPacket() {
 
         byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 127, -1, 11 };
 
@@ -49,7 +53,7 @@ public class BatteryListenerTest {
 
 
     @Test
-    public void consume() {
+    void consume() {
 
         byte expectedByte = 11;
         byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, 0, 5, 1, -1, expectedByte };
