@@ -6,9 +6,6 @@ import mockito.MockitoExtension;
 import org.junit.gen5.api.BeforeEach;
 import org.junit.gen5.api.Test;
 import org.junit.gen5.api.extension.ExtendWith;
-import org.junit.gen5.junit4.runner.JUnit5;
-
-import org.junit.runner.RunWith;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -29,7 +26,7 @@ import static org.mockito.Mockito.when;
  *
  * @author  Tobias Schneider - schneider@synyx.de
  */
-@RunWith(JUnit5.class)
+
 @ExtendWith(MockitoExtension.class)
 class TcpHandshakeServiceTest {
 

@@ -1,9 +1,6 @@
 package de.devoxx4kids.dronecontroller.command.common;
 
 import org.junit.gen5.api.Test;
-import org.junit.gen5.junit4.runner.JUnit5;
-
-import org.junit.runner.RunWith;
 
 import java.time.LocalDate;
 
@@ -19,7 +16,7 @@ import static java.time.format.DateTimeFormatter.ISO_DATE;
  *
  * @author  Tobias Schneider
  */
-@RunWith(JUnit5.class)
+
 class NullTerminatedStringTest {
 
     @Test

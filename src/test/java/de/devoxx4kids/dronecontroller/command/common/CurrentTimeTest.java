@@ -4,9 +4,6 @@ import de.devoxx4kids.dronecontroller.command.PacketType;
 
 import org.junit.gen5.api.BeforeEach;
 import org.junit.gen5.api.Test;
-import org.junit.gen5.junit4.runner.JUnit5;
-
-import org.junit.runner.RunWith;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -24,7 +21,7 @@ import static org.hamcrest.core.Is.is;
  *
  * @author  Tobias Schneider
  */
-@RunWith(JUnit5.class)
+
 class CurrentTimeTest {
 
     private CurrentTime sut;

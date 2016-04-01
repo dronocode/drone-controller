@@ -4,9 +4,6 @@ import de.devoxx4kids.dronecontroller.command.PacketType;
 
 import org.junit.gen5.api.BeforeEach;
 import org.junit.gen5.api.Test;
-import org.junit.gen5.junit4.runner.JUnit5;
-
-import org.junit.runner.RunWith;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA;
 
@@ -23,7 +20,7 @@ import static org.junit.gen5.api.Assertions.expectThrows;
  *
  * @author  Tobias Schneider
  */
-@RunWith(JUnit5.class)
+
 class PcmdTest {
 
     private Pcmd sut;
