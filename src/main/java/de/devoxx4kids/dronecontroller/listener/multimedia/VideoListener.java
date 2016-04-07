@@ -60,8 +60,10 @@ public class VideoListener implements EventListener {
 
     private byte[] getJpeg(byte[] data) {
 
-        byte[] jpegData = new byte[data.length];
-        System.arraycopy(data, 12, jpegData, 0, data.length - 12);
+        int imageLength = data.length - 12;
+
+        byte[] jpegData = new byte[imageLength];
+        System.arraycopy(data, 12, jpegData, 0, imageLength);
 
         return jpegData;
     }
