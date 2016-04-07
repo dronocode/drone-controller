@@ -64,6 +64,11 @@ public class TcpHandshakeServiceTest {
         assertThat(handshakeResponse.getArstream_max_ack_interval(), is(-1));
         assertThat(handshakeResponse.getC2d_update_port(), is(51));
         assertThat(handshakeResponse.getC2d_user_port(), is(21));
+
+        assertThat(handshakeResponse.toString(),
+            is("HandshakeResponse{status='0', c2d_port=54321, arstream_fragment_size=65000,"
+                + " arstream_fragment_maximum_number=4, arstream_max_ack_interval=-1, c2d_update_port=51, "
+                + "c2d_user_port=21}"));
     }
 
 
