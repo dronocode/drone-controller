@@ -1,15 +1,11 @@
 package de.devoxx4kids.dronecontroller.listener.multimedia;
 
-import de.devoxx4kids.dronecontroller.listener.EventListener;
+import java.lang.invoke.MethodHandles;
+import java.util.function.Consumer;
 
+import de.devoxx4kids.dronecontroller.listener.EventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import java.lang.invoke.MethodHandles;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_LOW_LATENCY;
 
@@ -29,25 +25,26 @@ public class VideoListener implements EventListener {
 
     private static final String FRAME_JPG = "frame.jpg";
 
-    private VideoListener() {
+    private final Consumer<byte[]> delegate;
+
+    private VideoListener(Consumer<byte[]> delegate) {
 
         // private, please use fabric method
+        this.delegate = delegate;
     }
 
-    public static VideoListener videoListener() {
 
-        return new VideoListener();
+
+    public static VideoListener videoListener(Consumer<byte[]> delegate) {
+
+        return new VideoListener(delegate);
     }
 
 
     @Override
     public void consume(byte[] data) {
 
-        try(FileOutputStream fos = new FileOutputStream(new File(FRAME_JPG))) {
-            fos.write(getJpeg(data));
-        } catch (IOException e) {
-            LOGGER.error("Could not generate jpg");
-        }
+        delegate.accept (getJpeg (data));
     }
 
 

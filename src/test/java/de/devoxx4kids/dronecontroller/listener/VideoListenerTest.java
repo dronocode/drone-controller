@@ -1,18 +1,13 @@
 package de.devoxx4kids.dronecontroller.listener;
 
-import de.devoxx4kids.dronecontroller.listener.multimedia.VideoListener;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
+import de.devoxx4kids.dronecontroller.listener.multimedia.VideoListener;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import static org.hamcrest.core.Is.is;
-
 import static org.junit.Assert.assertThat;
 
 
@@ -28,12 +23,15 @@ public class VideoListenerTest {
     @Before
     public void setUp() {
 
-        sut = VideoListener.videoListener();
+        sut = VideoListener.videoListener((bytes) -> {});
     }
 
 
     @Test
     public void consume() throws IOException {
+        AtomicReference<byte[]> payload = new AtomicReference<> ();
+
+        sut = VideoListener.videoListener (payload::set);
 
         byte[] packetHeader = new byte[] { 3, 125, 19, -30, 98, 0, 0, 19, 0, 1, 0, 1 };
         byte[] imagePayLoad = new byte[] {
@@ -49,11 +47,7 @@ public class VideoListenerTest {
 
         sut.consume(concatenateByteArrays(packetHeader, imagePayLoad));
 
-        Path path = Paths.get("frame.jpg");
-        byte[] savedImageAsBytes = Files.readAllBytes(path);
-        assertThat(savedImageAsBytes, is(imagePayLoad));
-
-        Files.delete(path);
+        assertThat(payload.get (), is(imagePayLoad));
     }
 
 
