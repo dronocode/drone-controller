@@ -70,6 +70,9 @@ public final class Pcmd implements Command {
         return new Pcmd(speed, degrees, waitingTime);
     }
 
+    public boolean isHalt () {
+        return speed == 0 && turn == 0;
+    }
 
     /**
      * Converts the degrees to percent on a circle.
