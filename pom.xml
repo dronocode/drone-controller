@@ -19,6 +19,14 @@
         </license>
     </licenses>
 
+    <developers>
+        <developer>
+            <name>Tobias Schneider</name>
+            <email>Tobias.Schneider@Tobsch.org</email>
+            <organizationUrl>http://tobsch.org</organizationUrl>
+        </developer>
+    </developers>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
