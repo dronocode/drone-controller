@@ -177,7 +177,9 @@ public class WirelessLanDroneConnection implements DroneConnection {
                         LOGGER.debug("Sending command '{}' with packet {}", command, convertAndCutPacket(packet, false));
                         sumoSocket.send(new DatagramPacket(packet, packet.length, getByName(deviceIp), devicePort));
 
-                        MILLISECONDS.sleep(command.waitingTime());
+                        int waitingTime = command.waitingTime();
+                        LOGGER.debug("Waiting time until send next packet is {}", waitingTime);
+                        MILLISECONDS.sleep(waitingTime);
                     } catch (InterruptedException e) {
                         throw new CommandException("Got interrupted while taking a command", e);
                     }
