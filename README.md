@@ -6,3 +6,11 @@
 # Drone Controller
 
 This library encapsulates the connection and the commands that can be send to the drone.
+
+## Maven
+
+        <dependency>
+            <groupId>de.devoxx4kids</groupId>
+            <artifactId>dronecontroller</artifactId>
+            <version>${version}</version>
+        </dependency>
