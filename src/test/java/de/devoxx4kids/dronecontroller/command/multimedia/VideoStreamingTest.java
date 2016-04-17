@@ -2,14 +2,14 @@ package de.devoxx4kids.dronecontroller.command.multimedia;
 
 import de.devoxx4kids.dronecontroller.command.PacketType;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
 import static org.hamcrest.CoreMatchers.is;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 /**
@@ -17,19 +17,20 @@ import static org.junit.Assert.assertThat;
  *
  * @author  Tobias Schneider
  */
-public class VideoStreamingTest {
+
+class VideoStreamingTest {
 
     private VideoStreaming sut;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void initialize() {
 
         sut = VideoStreaming.enableVideoStreaming();
     }
 
 
     @Test
-    public void enableVideoStreamingGetBytes() {
+    void enableVideoStreamingGetBytes() {
 
         VideoStreaming sut = VideoStreaming.enableVideoStreaming();
         byte[] bytesPacket = sut.getPacket(1);
@@ -39,7 +40,7 @@ public class VideoStreamingTest {
 
 
     @Test
-    public void disableVideoStreamingGetBytes() {
+    void disableVideoStreamingGetBytes() {
 
         VideoStreaming sut = VideoStreaming.disableVideoStreaming();
         byte[] bytesPacket = sut.getPacket(1);
@@ -49,7 +50,7 @@ public class VideoStreamingTest {
 
 
     @Test
-    public void getPacketType() {
+    void getPacketType() {
 
         PacketType packetType = sut.getPacketType();
         assertThat(packetType, is(DATA_WITH_ACK));
@@ -57,7 +58,7 @@ public class VideoStreamingTest {
 
 
     @Test
-    public void testToStringEnable() {
+    void testToStringEnable() {
 
         String string = VideoStreaming.enableVideoStreaming().toString();
         assertThat(string, is("VideoStreaming On"));
@@ -65,7 +66,7 @@ public class VideoStreamingTest {
 
 
     @Test
-    public void testToStringDisable() {
+    void testToStringDisable() {
 
         String string = VideoStreaming.disableVideoStreaming().toString();
         assertThat(string, is("VideoStreaming Off"));

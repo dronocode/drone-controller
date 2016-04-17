@@ -1,12 +1,12 @@
 package de.devoxx4kids.dronecontroller.command.common;
 
-import org.junit.Test;
+import org.junit.gen5.api.Test;
 
 import java.time.LocalDate;
 
-import static org.hamcrest.CoreMatchers.is;
-
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.hamcrest.core.Is.is;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE;
 
@@ -16,10 +16,11 @@ import static java.time.format.DateTimeFormatter.ISO_DATE;
  *
  * @author  Tobias Schneider
  */
-public class NullTerminatedStringTest {
+
+class NullTerminatedStringTest {
 
     @Test
-    public void getBytes() {
+    void getBytes() {
 
         byte[] bytesPackage = new NullTerminatedString(LocalDate.of(2015, 12, 1).format(ISO_DATE))
             .getNullTerminatedString();

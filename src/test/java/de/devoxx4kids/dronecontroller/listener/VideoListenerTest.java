@@ -2,8 +2,8 @@ package de.devoxx4kids.dronecontroller.listener;
 
 import de.devoxx4kids.dronecontroller.listener.multimedia.VideoListener;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
 
 import java.io.IOException;
 
@@ -11,9 +11,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 
 /**
@@ -21,19 +21,19 @@ import static org.junit.Assert.assertThat;
  *
  * @author  Tobias Schneider
  */
-public class VideoListenerTest {
+class VideoListenerTest {
 
     private VideoListener sut;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void initialize() {
 
         sut = VideoListener.videoListener();
     }
 
 
     @Test
-    public void consume() throws IOException {
+    void consume() throws IOException {
 
         byte[] packetHeader = new byte[] { 3, 125, 19, -30, 98, 0, 0, 19, 0, 1, 0, 1 };
         byte[] imagePayLoad = new byte[] {
@@ -58,7 +58,7 @@ public class VideoListenerTest {
 
 
     @Test
-    public void testTestIsVideoPacket() {
+    void testTestIsVideoPacket() {
 
         byte[] tcpInPacket = new byte[] { 3, 125, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, };
 
@@ -68,7 +68,7 @@ public class VideoListenerTest {
 
 
     @Test
-    public void testTestIsNoVideoPacket() {
+    void testTestIsNoVideoPacket() {
 
         byte[] tcpInPacket = new byte[] { 1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, };
 

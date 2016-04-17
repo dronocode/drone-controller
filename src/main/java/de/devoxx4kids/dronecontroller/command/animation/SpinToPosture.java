@@ -9,7 +9,7 @@ import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
 
 /**
- * TODO: how to end this command?
+ * The drone spins into posture. To get back in normal position just send this command again.
  *
  * @author  Alexander Bischof
  * @author  Tobias Schneider

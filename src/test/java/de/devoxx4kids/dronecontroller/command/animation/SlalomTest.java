@@ -2,8 +2,8 @@ package de.devoxx4kids.dronecontroller.command.animation;
 
 import de.devoxx4kids.dronecontroller.command.PacketType;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_WITH_ACK;
 
@@ -17,19 +17,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *
  * @author  Tobias Schneider
  */
-public class SlalomTest {
+
+class SlalomTest {
 
     private Slalom sut;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void initialize() {
 
         sut = Slalom.slalom();
     }
 
 
     @Test
-    public void getBytes() {
+    void getBytes() {
 
         byte[] bytesPackage = sut.getPacket(1);
 
@@ -38,7 +39,7 @@ public class SlalomTest {
 
 
     @Test
-    public void getPacketType() {
+    void getPacketType() {
 
         PacketType packetType = sut.getPacketType();
 
@@ -47,14 +48,14 @@ public class SlalomTest {
 
 
     @Test
-    public void testToString() {
+    void testToString() {
 
         assertThat(sut.toString(), is("Slalom"));
     }
 
 
     @Test
-    public void waitingTime() {
+    void waitingTime() {
 
         int waitingTime = sut.waitingTime();
 

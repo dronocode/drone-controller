@@ -2,12 +2,12 @@ package de.devoxx4kids.dronecontroller.listener;
 
 import de.devoxx4kids.dronecontroller.listener.common.PCMDListener;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.gen5.api.BeforeEach;
+import org.junit.gen5.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import static org.hamcrest.core.Is.is;
-
-import static org.junit.Assert.assertThat;
 
 
 /**
@@ -15,21 +15,22 @@ import static org.junit.Assert.assertThat;
  *
  * @author  Tobias Schneider
  */
-public class PCMDListenerTest {
+
+class PCMDListenerTest {
 
     private PCMDListener sut;
 
     private String pcmd;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void initialize() {
 
         sut = PCMDListener.pcmdlistener(s -> pcmd = s);
     }
 
 
     @Test
-    public void testTestIsBatteryPacket() {
+    void testTestIsBatteryPacket() {
 
         byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, 3, 1, 0, -1, 11 };
 
@@ -39,7 +40,7 @@ public class PCMDListenerTest {
 
 
     @Test
-    public void testTestIsNoBatteryPacket() {
+    void testTestIsNoBatteryPacket() {
 
         byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, 127, -1, 11 };
 
@@ -49,7 +50,7 @@ public class PCMDListenerTest {
 
 
     @Test
-    public void consume() {
+    void consume() {
 
         byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, 0, 5, 1, -1, 11 };
 
