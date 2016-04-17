@@ -130,9 +130,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <keyname>tobias.schneider@tobsch.org</keyname>
-                </configuration>
             </plugin>
 
             <!-- Test -->
