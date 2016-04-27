@@ -4,7 +4,8 @@ import de.devoxx4kids.dronecontroller.command.Command;
 
 
 /**
- * Interface for basic/common commands to keep the connection to the drone or something else.
+ * Interface for basic/common commands for internal conversations to the drone. If you only want to control the drone
+ * you never need this commands
  *
  * @author  Tobias Schneider - schneider@synyx.de
  */

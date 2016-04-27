@@ -58,6 +58,9 @@ public class WirelessLanDroneConnection implements DroneConnection {
     private final Clock clock;
     private final byte[] nextSequenceNumbers;
 
+    private boolean listenToResponse = true;
+    private boolean sendCommands = true;
+
     private int devicePort;
 
     public WirelessLanDroneConnection(String deviceIp, int tcpPort, String wirelessLanName) {
@@ -76,6 +79,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
     public void connect() throws ConnectionException {
 
         LOGGER.debug("Connecting to drone...");
+        listenToResponse = true;
 
         HandshakeResponse handshakeResponse;
 
@@ -92,8 +96,18 @@ public class WirelessLanDroneConnection implements DroneConnection {
         sendCommand(currentTime(clock));
 
         runResponseHandler();
-        runConsumer(commandQueue);
-        runConsumer(commonCommandQueue);
+        startSender(commandQueue);
+        startSender(commonCommandQueue);
+    }
+
+
+    @Override
+    public void disconnect() {
+
+        LOGGER.debug("Disconnecting from drone...");
+        listenToResponse = false;
+        sendCommands = false;
+        LOGGER.debug("Disconnected from drone");
     }
 
 
@@ -126,16 +140,16 @@ public class WirelessLanDroneConnection implements DroneConnection {
     /**
      * Drone response handler.
      *
-     * <p>Will listen to the udp packages send from the drone to the receiver and looks up what command it is and react
+     * <p>Will listen to the udp packages sent from the drone to the receiver and looks up what command it is and react
      * to it</p>
      */
     private void runResponseHandler() {
 
         new Thread(() -> {
             try(DatagramSocket sumoSocket = new DatagramSocket(devicePort)) {
-                LOGGER.info("Listing for response on port {}", devicePort);
+                LOGGER.debug("Listing for response on port {}", devicePort);
 
-                while (true) {
+                while (listenToResponse) {
                     byte[] buffer = new byte[65000];
 
                     DatagramPacket datagramPacket = new DatagramPacket(buffer, buffer.length);
@@ -155,6 +169,8 @@ public class WirelessLanDroneConnection implements DroneConnection {
 
                     eventListeners.stream().filter(e -> e.test(packet)).forEach(e -> e.consume(packet));
                 }
+
+                LOGGER.debug("Stop listening drone packets on port {}", devicePort);
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
                 LOGGER.error("Error occurred while receiving packets from the drone.");
@@ -163,13 +179,18 @@ public class WirelessLanDroneConnection implements DroneConnection {
     }
 
 
-    private void runConsumer(BlockingQueue<Command> queue) {
+    /**
+     * Starts a new thread as sender.
+     *
+     * @param  queue
+     */
+    private void startSender(BlockingQueue<Command> queue) {
 
         LOGGER.debug("Creating a command queue consumer");
 
         new Thread(() -> {
             try(DatagramSocket sumoSocket = new DatagramSocket()) {
-                while (true) {
+                while (sendCommands) {
                     try {
                         Command command = queue.take();
                         byte[] packet = command.getPacket(getNextSequenceNumber(command));
@@ -184,6 +205,8 @@ public class WirelessLanDroneConnection implements DroneConnection {
                         throw new CommandException("Got interrupted while taking a command", e);
                     }
                 }
+
+                LOGGER.debug("Stop command queue consumer");
             } catch (IOException e) {
                 LOGGER.error("Error occurred while sending packets to the drone.");
             }

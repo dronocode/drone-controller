@@ -18,6 +18,12 @@ public interface DroneConnection {
 
 
     /**
+     * Disconnects the drone and stops the sender and dispatcher.
+     */
+    void disconnect();
+
+
+    /**
      * Sends the given {@link Command} to the drone.
      *
      * @param  command  to send to drone
