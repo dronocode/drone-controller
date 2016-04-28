@@ -1,6 +1,4 @@
-package de.devoxx4kids.dronecontroller.listener;
-
-import de.devoxx4kids.dronecontroller.listener.common.PCMDListener;
+package de.devoxx4kids.dronecontroller.listener.common;
 
 import org.junit.gen5.api.BeforeEach;
 import org.junit.gen5.api.Test;
@@ -11,28 +9,28 @@ import static org.hamcrest.core.Is.is;
 
 
 /**
- * Unit test of {@link PCMDListener}.
+ * Unit test of {@link BatteryListener}.
  *
  * @author  Tobias Schneider
  */
 
-class PCMDListenerTest {
+class BatteryListenerTest {
 
-    private PCMDListener sut;
+    private BatteryListener sut;
 
-    private String pcmd;
+    private byte batteryState;
 
     @BeforeEach
     void initialize() {
 
-        sut = PCMDListener.pcmdlistener(s -> pcmd = s);
+        sut = BatteryListener.batteryListener(b -> batteryState = b);
     }
 
 
     @Test
     void testTestIsBatteryPacket() {
 
-        byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, 3, 1, 0, -1, 11 };
+        byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, 0, 5, 1, -1, 11 };
 
         boolean test = sut.test(tcpInPacket);
         assertThat(test, is(true));
@@ -52,9 +50,10 @@ class PCMDListenerTest {
     @Test
     void consume() {
 
-        byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, 0, 5, 1, -1, 11 };
+        byte expectedByte = 11;
+        byte[] tcpInPacket = new byte[] { -1, -1, -1, -1, -1, -1, -1, 0, 5, 1, -1, expectedByte };
 
         sut.consume(tcpInPacket);
-        assertThat(pcmd, is("11"));
+        assertThat(batteryState, is(expectedByte));
     }
 }

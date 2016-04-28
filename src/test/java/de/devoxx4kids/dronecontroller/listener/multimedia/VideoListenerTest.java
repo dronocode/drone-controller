@@ -1,6 +1,4 @@
-package de.devoxx4kids.dronecontroller.listener;
-
-import de.devoxx4kids.dronecontroller.listener.multimedia.VideoListener;
+package de.devoxx4kids.dronecontroller.listener.multimedia;
 
 import org.junit.gen5.api.BeforeEach;
 import org.junit.gen5.api.Test;
@@ -60,7 +58,7 @@ class VideoListenerTest {
     @Test
     void testTestIsVideoPacket() {
 
-        byte[] tcpInPacket = new byte[] { 3, 125, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, };
+        byte[] tcpInPacket = new byte[] { 3, 125, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -40 };
 
         boolean test = sut.test(tcpInPacket);
         assertThat(test, is(true));
@@ -70,7 +68,7 @@ class VideoListenerTest {
     @Test
     void testTestIsNoVideoPacket() {
 
-        byte[] tcpInPacket = new byte[] { 1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, };
+        byte[] tcpInPacket = new byte[] { 1, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -40 };
 
         boolean test = sut.test(tcpInPacket);
         assertThat(test, is(false));

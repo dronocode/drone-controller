@@ -54,7 +54,9 @@ public class VideoListener implements EventListener {
     @Override
     public boolean test(byte[] data) {
 
-        return data[0] == DATA_LOW_LATENCY.toByte() && data[1] == 125;
+        boolean jpgStart = data[12] == -1 && data[13] == -40;
+
+        return data[0] == DATA_LOW_LATENCY.toByte() && data[1] == 125 && jpgStart;
     }
 
 
