@@ -32,7 +32,7 @@ public final class Ondulation implements Command {
     public byte[] getPacket(int sequenceNumber) {
 
         return new byte[] {
-                (byte) packetType.ordinal(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(),
+                packetType.toByte(), ChannelType.JUMPINGSUMO_CONTROLLER_TO_DEVICE_ACK_ID.toByte(),
                 (byte) sequenceNumber, 15, 0, 0, 0, commandKey.getProjectId(), commandKey.getClazzId(),
                 commandKey.getCommandId(), 0, 5, 0, 0, 0
             };
