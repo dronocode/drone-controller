@@ -14,3 +14,17 @@ This library encapsulates the connection and the commands that can be send to th
             <artifactId>dronecontroller</artifactId>
             <version>${version}</version>
         </dependency>
+        
+## Release
+
+        mvn versions:set -DnewVersion=${newVersion}
+
+then
+
+        mvn clean deploy -P release
+
+then
+
+        git tag ${newVersion}
+
+and finally push it.
