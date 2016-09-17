@@ -28,6 +28,7 @@ public class VideoListener implements EventListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     private static final String FRAME_JPG = "frame.jpg";
+    private static byte[] lastJpeg = null;
 
     private VideoListener() {
 
@@ -43,7 +44,9 @@ public class VideoListener implements EventListener {
     @Override
     public void consume(byte[] data) {
 
-        try(FileOutputStream fos = new FileOutputStream(new File(FRAME_JPG))) {
+        File file = new File(FRAME_JPG);
+        try(FileOutputStream fos = new FileOutputStream(file)) {
+            LOGGER.debug("writing video jpg to "+file.getAbsolutePath()  );
             fos.write(getJpeg(data));
         } catch (IOException e) {
             LOGGER.error("Could not generate jpg");
@@ -64,9 +67,13 @@ public class VideoListener implements EventListener {
 
         int imageLength = data.length - 12;
 
-        byte[] jpegData = new byte[imageLength];
-        System.arraycopy(data, 12, jpegData, 0, imageLength);
+        lastJpeg = new byte[imageLength];
+        System.arraycopy(data, 12, lastJpeg, 0, imageLength);
 
-        return jpegData;
+        return lastJpeg;
+    }
+
+    public byte[] getLastJpeg() {
+        return lastJpeg;
     }
 }
