@@ -130,8 +130,10 @@ public class WirelessLanDroneConnection implements DroneConnection {
     public void addEventListener(EventListener eventListener) {
 
         if (eventListener instanceof CommonEventListener) {
+            LOGGER.debug("adding eventListener common: {}", eventListener.getClass().getName());
             this.commonEventListeners.add(eventListener);
         } else {
+            LOGGER.debug("adding eventListener       : {}", eventListener.getClass().getName());
             this.eventListeners.add(eventListener);
         }
     }

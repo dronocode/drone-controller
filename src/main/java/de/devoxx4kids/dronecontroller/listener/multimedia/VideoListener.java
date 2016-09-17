@@ -43,7 +43,7 @@ public class VideoListener implements EventListener {
 
     @Override
     public void consume(byte[] data) {
-
+        LOGGER.debug("consuming video packet");
         File file = new File(FRAME_JPG);
         try(FileOutputStream fos = new FileOutputStream(file)) {
             LOGGER.debug("writing video jpg to "+file.getAbsolutePath()  );
