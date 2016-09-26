@@ -22,6 +22,7 @@ public final class Pcmd implements Command {
 
     private final CommandKey commandKey = CommandKey.commandKey(3, 0, 0);
     private final byte speed;
+    private final int degrees;
     private final byte turn;
     private final Integer waitingTime;
     private final PacketType packetType = DATA;
@@ -38,6 +39,7 @@ public final class Pcmd implements Command {
         }
 
         this.speed = (byte) speed;
+        this.degrees = degrees; // required for cloning
         this.turn = (byte) degreeToPercent(degrees);
         this.waitingTime = waitingTime;
     }
@@ -105,12 +107,24 @@ public final class Pcmd implements Command {
         return packetType;
     }
 
+    public byte speed() {
+        return speed;
+    }
+
+    public byte turn() {
+        return turn;
+    }
+
+    public int degrees() {
+        return degrees;
+    }
 
     @Override
     public String toString() {
 
         return "Pcmd{"
             + "speed=" + speed
+            + ", degrees=" + degrees
             + ", turn=" + turn + '}';
     }
 
@@ -123,5 +137,9 @@ public final class Pcmd implements Command {
         }
 
         return this.waitingTime;
+    }
+
+    public Command clone(int waitingTime) {
+        return new Pcmd(speed, degrees, waitingTime);
     }
 }

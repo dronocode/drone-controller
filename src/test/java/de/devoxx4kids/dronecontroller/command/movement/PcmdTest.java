@@ -68,7 +68,7 @@ class PcmdTest {
     @Test
     void testToString() {
 
-        assertThat(sut.toString(), is("Pcmd{speed=40, turn=50}"));
+        assertThat(sut.toString(), is("Pcmd{speed=40, degrees=180, turn=50}"));
     }
 
 
@@ -96,5 +96,14 @@ class PcmdTest {
         int waitingTime = Pcmd.pcmd(50, 50, 0).waitingTime();
 
         assertThat(waitingTime, is(0));
+    }
+
+    @Test
+    void cloning() {
+        Pcmd command = Pcmd.pcmd(111, 180, 123);
+        Pcmd clone = (Pcmd) command.clone(255);
+        assertThat(clone.speed(), is((byte)111));
+        assertThat(clone.degrees(), is(180));
+        assertThat(clone.waitingTime(), is(255));
     }
 }

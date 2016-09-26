@@ -10,6 +10,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.lang.invoke.MethodHandles;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 import static de.devoxx4kids.dronecontroller.command.PacketType.DATA_LOW_LATENCY;
 
@@ -29,6 +32,10 @@ public class VideoListener implements EventListener {
 
     private static final String FRAME_JPG = "frame.jpg";
     private static byte[] lastJpeg = null;
+    private boolean writeToDisk=true;
+    private float frameRate = 0;
+    long lastFrame = System.currentTimeMillis()-20;
+    MovingAverage average = new MovingAverage(20);
 
     private VideoListener() {
 
@@ -43,14 +50,22 @@ public class VideoListener implements EventListener {
 
     @Override
     public void consume(byte[] data) {
-        LOGGER.debug("consuming video packet");
-        File file = new File(FRAME_JPG);
-        try(FileOutputStream fos = new FileOutputStream(file)) {
-            LOGGER.debug("writing video jpg to "+file.getAbsolutePath()  );
-            fos.write(getJpeg(data));
-        } catch (IOException e) {
-            LOGGER.error("Could not generate jpg");
+        MathContext mc = new MathContext(2, RoundingMode.HALF_UP);
+        average.add(new BigDecimal((System.currentTimeMillis() - lastFrame)).divide(new BigDecimal(1000),mc));
+
+        LOGGER.debug("consuming video packet at a framerate of {}", new BigDecimal(1).divide(average.getAverage(),mc));
+        byte[] jpeg = getJpeg(data);
+        if (writeToDisk) {
+            File file = new File(FRAME_JPG);
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                LOGGER.debug("writing video jpg to " + file.getAbsolutePath());
+
+                fos.write(jpeg);
+            } catch (IOException e) {
+                LOGGER.error("Could not generate jpg");
+            }
         }
+        lastFrame=System.currentTimeMillis();
     }
 
 
@@ -75,5 +90,12 @@ public class VideoListener implements EventListener {
 
     public byte[] getLastJpeg() {
         return lastJpeg;
+    }
+
+    /**
+     * @param enable By default writing is on. If file on disk is not needed, it can be switched off
+     */
+    public void setWriteToDisk(boolean enable) {
+        this.writeToDisk = enable;
     }
 }

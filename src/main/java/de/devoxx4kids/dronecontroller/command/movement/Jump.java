@@ -23,15 +23,17 @@ public final class Jump implements Command {
     private final CommandKey commandKey = CommandKey.commandKey(3, 2, 3);
     private final Type type;
     private final PacketType packetType = DATA_WITH_ACK;
+    private final int waitingTime;
 
-    private Jump(Type type) {
+    private Jump(Type type, int waitingTime) {
 
         this.type = type;
+        this.waitingTime = waitingTime;
     }
 
     public static Jump jump(Type type) {
 
-        return new Jump(type);
+        return new Jump(type, 5000);
     }
 
 
@@ -63,6 +65,6 @@ public final class Jump implements Command {
     @Override
     public int waitingTime() {
 
-        return 5000;
+        return waitingTime;
     }
 }

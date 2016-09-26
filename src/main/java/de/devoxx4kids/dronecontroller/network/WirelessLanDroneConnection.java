@@ -5,35 +5,30 @@ import de.devoxx4kids.dronecontroller.command.CommandException;
 import de.devoxx4kids.dronecontroller.command.PacketType;
 import de.devoxx4kids.dronecontroller.command.common.CommonCommand;
 import de.devoxx4kids.dronecontroller.command.common.Pong;
+import de.devoxx4kids.dronecontroller.command.movement.Pcmd;
 import de.devoxx4kids.dronecontroller.listener.EventListener;
 import de.devoxx4kids.dronecontroller.listener.common.CommonEventListener;
+import de.devoxx4kids.dronecontroller.network.ConnectionException;
+import de.devoxx4kids.dronecontroller.network.DroneConnection;
 import de.devoxx4kids.dronecontroller.network.handshake.HandshakeRequest;
 import de.devoxx4kids.dronecontroller.network.handshake.HandshakeResponse;
 import de.devoxx4kids.dronecontroller.network.handshake.TcpHandshakeService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-
 import java.lang.invoke.MethodHandles;
-
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-
 import java.time.Clock;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static de.devoxx4kids.dronecontroller.command.common.CurrentDate.currentDate;
 import static de.devoxx4kids.dronecontroller.command.common.CurrentTime.currentTime;
-
 import static java.net.InetAddress.getByName;
-
 import static java.util.Arrays.copyOfRange;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
@@ -42,13 +37,14 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
  * Represents the queue wireless lan connection to the drone.
  *
  * @author  Tobias Schneider
+ * @author  Stefan Höhn
  */
 public class WirelessLanDroneConnection implements DroneConnection {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    private final BlockingQueue<Command> commonCommandQueue = new ArrayBlockingQueue<>(25);
-    private final BlockingQueue<Command> commandQueue = new ArrayBlockingQueue<>(25);
+    private final ConcurrentLinkedQueue<Command> commonCommandQueue = new ConcurrentLinkedQueue<Command>();
+    private final ConcurrentLinkedQueue<Command> commandQueue = new ConcurrentLinkedQueue<Command>();
     private final List<EventListener> commonEventListeners = new ArrayList<>();
     private final List<EventListener> eventListeners = new ArrayList<>();
 
@@ -63,6 +59,11 @@ public class WirelessLanDroneConnection implements DroneConnection {
 
     private int devicePort;
 
+    // If waiting time is longer, drone will be sent additional Null-Pcmds to fullfil the requirement of the "link estimator".
+    // see http://forum.developer.parrot.com/t/sumo-drone-protocol-sending-a-movement-command-stops-video-transfer/4157
+
+    private final static int maxWaitingTime = 100; // at least every x ms a command is sent to the drone
+
     public WirelessLanDroneConnection(String deviceIp, int tcpPort, String wirelessLanName) {
 
         LOGGER.info("Creating {} for {}:{}...", this.getClass().getSimpleName(), deviceIp, tcpPort);
@@ -73,6 +74,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
         this.clock = Clock.systemDefaultZone();
 
         nextSequenceNumbers = new byte[PacketType.values().length];
+
     }
 
     @Override
@@ -96,8 +98,8 @@ public class WirelessLanDroneConnection implements DroneConnection {
         sendCommand(currentTime(clock));
 
         runResponseHandler();
-        startSender(commandQueue);
-        startSender(commonCommandQueue);
+        startSender(commandQueue, true); // only run heartbeat here
+        startSender(commonCommandQueue,false); // don't use long running split commands here.
     }
 
 
@@ -110,19 +112,32 @@ public class WirelessLanDroneConnection implements DroneConnection {
         LOGGER.debug("Disconnected from drone");
     }
 
-
     @Override
     public void sendCommand(Command command) {
+        int waitingTime = command.waitingTime();
 
-        try {
-            if (command instanceof CommonCommand) {
-                commonCommandQueue.put(command);
-            } else {
-                commandQueue.put(command);
+        /*
+            (only) PCmds need to send a continuous stream of commands to keep the drone busy for that time
+         */
+        if (command instanceof Pcmd) {
+            LOGGER.debug("putting Pcmd's into queue {} for time {}", command, waitingTime);
+
+            while (waitingTime > 0) { // generate enough Pcmds for the expected waiting time
+                Command newCommand = ((Pcmd)command).clone((waitingTime > maxWaitingTime) ? maxWaitingTime : waitingTime);
+                commandQueue.offer(newCommand);
+                waitingTime = waitingTime - maxWaitingTime;
             }
-        } catch (InterruptedException e) {
-            LOGGER.info("Could not add {} to a queue.", command);
+
+        } else {
+            LOGGER.debug("putting command into queue {}", command);
+            if (command instanceof CommonCommand) {
+                commonCommandQueue.offer(command);
+            } else {
+                commandQueue.offer(command);
+            }
         }
+
+
     }
 
 
@@ -158,7 +173,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
                     sumoSocket.receive(datagramPacket);
 
                     byte[] packet = datagramPacket.getData();
-                    LOGGER.debug("Receiving packet {}", convertAndCutPacket(packet, false));
+                    LOGGER.trace("Receiving packet {}", convertAndCutPacket(packet, false));
 
                     commonEventListeners.stream().filter(e -> e.test(packet)).forEach(e -> e.consume(packet));
 
@@ -172,7 +187,7 @@ public class WirelessLanDroneConnection implements DroneConnection {
                     eventListeners.stream().filter(e -> e.test(packet)).forEach(e -> e.consume(packet));
                 }
 
-                LOGGER.debug("Stop listening drone packets on port {}", devicePort);
+                LOGGER.debug("Stopped listening drone packets on port {}", devicePort);
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
                 LOGGER.error("Error occurred while receiving packets from the drone.");
@@ -185,8 +200,9 @@ public class WirelessLanDroneConnection implements DroneConnection {
      * Starts a new thread as sender.
      *
      * @param  queue
+     * @param heartbeat sends ongoing packets to drone to prevent drone to slow down video. ONLY One Sender thread must do that!
      */
-    private void startSender(BlockingQueue<Command> queue) {
+    private void startSender(ConcurrentLinkedQueue<Command> queue, boolean heartbeat) {
 
         LOGGER.debug("Creating a command queue consumer");
 
@@ -194,21 +210,34 @@ public class WirelessLanDroneConnection implements DroneConnection {
             try(DatagramSocket sumoSocket = new DatagramSocket()) {
                 while (sendCommands) {
                     try {
-                        Command command = queue.take();
-                        byte[] packet = command.getPacket(getNextSequenceNumber(command));
+                        Command command = queue.poll();
+                        if (command!=null) {
+                            byte[] packet = command.getPacket(getNextSequenceNumber(command));
 
-                        LOGGER.debug("Sending command '{}' with packet {}", command, convertAndCutPacket(packet, false));
-                        sumoSocket.send(new DatagramPacket(packet, packet.length, getByName(deviceIp), devicePort));
+                            LOGGER.debug("Sending command '{}' with packet {}", command, convertAndCutPacket(packet, false));
 
-                        int waitingTime = command.waitingTime();
-                        LOGGER.debug("Waiting time until send next packet is {}", waitingTime);
-                        MILLISECONDS.sleep(waitingTime);
+                            sumoSocket.send(new DatagramPacket(packet, packet.length, getByName(deviceIp), devicePort));
+
+                            int waitingTime = command.waitingTime();
+                            LOGGER.debug("Waiting time until send next packet is {}", waitingTime);
+                            MILLISECONDS.sleep(waitingTime);
+
+                        } else { // send "null" PCmd (0,0) =  ("go by 0 speed") when queue is empty
+                            if (heartbeat) {
+                                Pcmd nullCommand = Pcmd.pcmd(0, 0, maxWaitingTime);
+                                byte[] nullMovePacket = nullCommand.getPacket(getNextSequenceNumber(nullCommand));
+                                LOGGER.trace("empty queue,  sending null command '{}' with packet {}", nullCommand, convertAndCutPacket(nullMovePacket, false));
+                                sumoSocket.send(new DatagramPacket(nullMovePacket, nullMovePacket.length, getByName(deviceIp), devicePort));
+                            }
+                            MILLISECONDS.sleep(maxWaitingTime);
+                        }
+
                     } catch (InterruptedException e) {
                         throw new CommandException("Got interrupted while taking a command", e);
                     }
                 }
 
-                LOGGER.debug("Stop command queue consumer");
+                LOGGER.debug("Stopped command queue consumer");
             } catch (IOException e) {
                 LOGGER.error("Error occurred while sending packets to the drone.");
             }
