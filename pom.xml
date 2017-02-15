@@ -6,7 +6,7 @@
 
     <groupId>de.devoxx4kids</groupId>
     <artifactId>dronecontroller</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.0a</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Library to remote control drones</description>
@@ -201,3 +201,4 @@
         </profile>
     </profiles>
 </project>
+
